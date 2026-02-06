@@ -295,9 +295,7 @@
   transition: transform 0.2s ease;
 }
 
-#no-btn:hover {
-  transform: scale(1.1);
-}
+
 
 
 
