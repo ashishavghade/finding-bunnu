@@ -30,35 +30,40 @@ document.addEventListener("DOMContentLoaded", () => {
     animatePenguin();
   });
 
-  function animatePenguin() {
+  
+function animatePenguin() {
 
-    if (chasing) {
-penguinX += (cursorX - penguinX) * speed;
-penguinY += (cursorY - penguinY) * speed;
+  if (chasing) {
 
-penguin.style.left = penguinX + "px";
-penguin.style.top = penguinY + "px";
+    // Smooth chase movement
+    penguinX += (cursorX - penguinX) * speed;
+    penguinY += (cursorY - penguinY) * speed;
 
-// Calculate movement intensity
-const distance = Math.hypot(cursorX - penguinX, cursorY - penguinY);
+    penguin.style.left = penguinX + "px";
+    penguin.style.top = penguinY + "px";
 
-// Waddle bounce
-let bounce = 0;
-if (distance > 5) {
-  bounce = Math.sin(Date.now() * 0.01) * 6;
-}
+    // Distance from cursor
+    const distance = Math.hypot(cursorX - penguinX, cursorY - penguinY);
 
-// Flip direction + apply bounce
-if (cursorX < penguinX) {
-  penguin.style.transform =
-    `translate(-50%, -50%) scaleX(-1) translateY(${bounce}px)`;
-} else {
-  penguin.style.transform =
-    `translate(-50%, -50%) scaleX(1) translateY(${bounce}px)`;
-}
+    // Waddle bounce (only when moving)
+    let bounce = 0;
+    let tilt = 0;
+
+    if (distance > 5) {
+      const time = Date.now() * 0.02;
+      bounce = Math.sin(time) * 6;      // up-down motion
+      tilt = Math.sin(time) * 5;        // tiny side tilt
     }
 
-    requestAnimationFrame(animatePenguin);
+    // Direction flip
+    const direction = cursorX < penguinX ? -1 : 1;
+
+    // Apply all transforms cleanly
+    penguin.style.transform =
+      `translate(-50%, -50%) translateY(${bounce}px) rotate(${tilt}deg) scaleX(${direction})`;
   }
+
+  requestAnimationFrame(animatePenguin);
+}
 
 });
