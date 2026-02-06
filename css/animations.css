@@ -43,26 +43,10 @@
 
 
 /* =========================
-   🐧 MALE PENGUIN
+   🐧 MALE & FEMALE BASE
 ========================= */
 
-#male-penguin {
-  position: absolute;
-  width: 80px;
-  transform: translate(-50%, -50%);
-  opacity: 0;
-  transition: opacity 0.5s ease;
-}
-
-#male-penguin.show {
-  opacity: 1;
-}
-
-
-/* =========================
-   🐧 FEMALE PENGUIN
-========================= */
-
+#male-penguin,
 #female-penguin {
   position: absolute;
   width: 80px;
@@ -71,20 +55,22 @@
   transition: opacity 0.5s ease;
 }
 
+#male-penguin.show,
 #female-penguin.show {
   opacity: 1;
 }
 
 
 /* =========================
-   🎀 BOW (properly placed)
+   🎀 BOW (Stable Position)
 ========================= */
 
 #female-penguin .bow {
   position: absolute;
-  top: 8px;          /* on head */
-  right: 14px;
-  width: 14px;
+  top: 6px;          /* sits on head */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 16px;
   height: 10px;
   background: hotpink;
   border-radius: 50%;
@@ -98,6 +84,7 @@
   height: 10px;
   background: pink;
   border-radius: 50%;
+  top: 0;
 }
 
 #female-penguin .bow::before {
@@ -110,16 +97,17 @@
 
 
 /* =========================
-   🌸 BLUSH (cheeks)
+   🌸 BLUSH (Centered Cheeks)
 ========================= */
 
 #female-penguin .blush {
   position: absolute;
-  top: 40px;         /* cheek level */
-  left: 20px;
-  width: 35px;
-  height: 14px;
-  background: radial-gradient(circle, rgba(255,100,150,0.8) 0%, transparent 70%);
+  top: 38px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 16px;
+  background: radial-gradient(circle, rgba(255,120,160,0.9) 0%, transparent 70%);
   opacity: 0;
   transition: opacity 0.3s ease;
 }
@@ -130,7 +118,7 @@
 
 
 /* =========================
-   🫁 BREATHING (inner only)
+   🫁 BREATHING (Inner Only)
 ========================= */
 
 .penguin-inner.idle {
@@ -145,7 +133,7 @@
 
 
 /* =========================
-   💋 KISS BOUNCE
+   💋 KISS BOUNCE (Safe)
 ========================= */
 
 .kiss {
@@ -154,6 +142,48 @@
 
 @keyframes kissBounce {
   0%   { transform: translate(-50%, -50%) scale(1); }
-  50%  { transform: translate(-50%, -50%) scale(1.1); }
+  50%  { transform: translate(-50%, -50%) scale(1.08); }
   100% { transform: translate(-50%, -50%) scale(1); }
+}
+
+
+/* =========================
+   💗 CELEBRATION EFFECTS
+========================= */
+
+#celebration-layer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 20;
+}
+
+.heart-particle {
+  position: absolute;
+  font-size: 20px;
+  animation: floatUp 1.5s ease-out forwards;
+}
+
+@keyframes floatUp {
+  0%   { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(-150px) scale(1.6); }
+}
+
+.star-particle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: white;
+  border-radius: 50%;
+  box-shadow: 0 0 10px white;
+  animation: shoot 1s ease-out forwards;
+}
+
+@keyframes shoot {
+  0%   { opacity: 1; transform: translate(0,0); }
+  100% { opacity: 0; transform: translate(200px,-200px); }
 }
