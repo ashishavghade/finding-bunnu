@@ -1,7 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
 
   const enterBtn = document.getElementById("enter-btn");
-  const penguin = document.getElementById("male-penguin");
+ const penguin = document.getElementById("male-penguin");
+const penguinImg = document.querySelector(".penguin-inner");
   const cursor = document.getElementById("heart-cursor");
 
   let penguinX = window.innerWidth / 2;
@@ -72,14 +73,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (frameTimer > 8) {
           currentFrame = (currentFrame + 1) % walkFrames.length;
-          penguin.src = walkFrames[currentFrame];
+          penguinImg.src = walkFrames[currentFrame];
           frameTimer = 0;
         }
 
       } else {
 
         // Idle state
-        penguin.src = "assets/images/penguin_walk02.png";
+        penguinImg.src = "assets/images/penguin_walk02.png";
 
         // Cute bounce
         const bounce = Math.sin(Date.now() * 0.01) * 3;
@@ -87,7 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
         penguin.style.transform =
           `translate(-50%, -50%) translateY(${bounce}px) scaleX(${direction})`;
 
-        penguin.classList.add("idle");
+        penguinImg.classList.add("idle");
       }
 
       // Heart glow when close
