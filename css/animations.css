@@ -23,28 +23,12 @@
 }
 
 /* =========================
-   🎬 STAGE & OVERLAY
+   🎬 STAGE
 ========================= */
 
-#stage {
+#content {
   transform-origin: center center;
-  transition: transform 6s linear;
-}
-
-#cinematic-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: transparent;
-  pointer-events: none;
-  z-index: 5;
-  transition: background 1s ease;
-}
-
-.overlay-dim {
-  background: rgba(20, 0, 30, 0.5);
+  transition: transform 0.3s linear;
 }
 
 /* =========================
@@ -56,7 +40,7 @@
   top: 0;
   left: 0;
   pointer-events: none;
-  z-index: 10;
+  z-index: 20;
 }
 
 #male-penguin,
@@ -74,28 +58,29 @@
 }
 
 /* =========================
-   ❤️ HEART EYES
+   ❤️ HEART EYES (FIXED)
 ========================= */
 
 .heart-eye {
   position: absolute;
-  font-size: 10px;
-  opacity: 0;
-  transition: opacity 2s ease;
+  font-size: 12px;
+  animation: beat 0.8s infinite;
 }
 
-.left-eye {
-  top: 28px;
-  left: 22px;
+.heart-eye.left {
+  top: 26px;
+  left: 20px;
 }
 
-.right-eye {
-  top: 28px;
-  right: 22px;
+.heart-eye.right {
+  top: 26px;
+  right: 20px;
 }
 
-.show-eyes .heart-eye {
-  opacity: 1;
+@keyframes beat {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.3); }
+  100% { transform: scale(1); }
 }
 
 /* =========================
@@ -148,20 +133,7 @@
 }
 
 /* =========================
-   💋 KISS LEAN
-========================= */
-
-.lean-in {
-  animation: lean 2s ease forwards;
-}
-
-@keyframes lean {
-  0% { transform: translate(-50%, -50%) scale(1); }
-  100% { transform: translate(-50%, -50%) scale(1.05); }
-}
-
-/* =========================
-   🎆 FIREWORKS
+   🎆 FIREWORKS (UPGRADED)
 ========================= */
 
 .firework {
@@ -173,40 +145,52 @@
 }
 
 @keyframes explode {
-  0% { opacity: 1; transform: scale(1); }
-  100% { opacity: 0; transform: scale(8); }
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(10);
+  }
 }
 
 /* =========================
-   💗 BALLOON HEARTS
+   💗 BALLOONS (BOLLYWOOD)
 ========================= */
 
 .balloon {
   position: absolute;
-  font-size: 22px;
+  font-size: 24px;
   animation: floatBalloon 6s linear forwards;
 }
 
 @keyframes floatBalloon {
-  0% { transform: translateY(0); opacity: 1; }
-  100% { transform: translateY(-500px); opacity: 0; }
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-600px);
+    opacity: 0;
+  }
 }
 
 /* =========================
-   ✨ STAR PARTICLES
+   ✨ SPARKLES (FIXED CLASS)
 ========================= */
 
-.star {
+.sparkle {
   position: absolute;
-  width: 4px;
-  height: 4px;
+  width: 5px;
+  height: 5px;
   background: white;
   border-radius: 50%;
-  box-shadow: 0 0 6px white;
-  animation: sparkle 2s ease-out forwards;
+  box-shadow: 0 0 8px white;
+  animation: sparkleAnim 1s ease-out forwards;
 }
 
-@keyframes sparkle {
+@keyframes sparkleAnim {
   0% { opacity: 1; transform: scale(1); }
   100% { opacity: 0; transform: scale(4); }
 }
