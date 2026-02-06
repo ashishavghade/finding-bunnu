@@ -6,7 +6,7 @@
 }
 
 body {
-  cursor: none; /* hide default cursor */
+/* cursor: none; /* hide default cursor */
   font-family: 'Poppins', sans-serif;
   overflow-x: hidden;
   background: linear-gradient(135deg, #ffd6e8, #e6d6ff, #ffe5d4);
