@@ -78,29 +78,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  function triggerCelebration(x, y) {
-
-    // hearts
-    for (let i = 0; i < 15; i++) {
-      const heart = document.createElement("div");
-      heart.className = "heart-particle";
-      heart.innerHTML = "💗";
-      heart.style.left = x + (Math.random() * 80 - 40) + "px";
-      heart.style.top = y + (Math.random() * 40 - 20) + "px";
-      celebrationLayer.appendChild(heart);
-      setTimeout(() => heart.remove(), 1500);
-    }
-
-    // stars
-    for (let i = 0; i < 8; i++) {
-      const star = document.createElement("div");
-      star.className = "star-particle";
-      star.style.left = x + "px";
-      star.style.top = y + "px";
-      celebrationLayer.appendChild(star);
-      setTimeout(() => star.remove(), 1000);
-    }
-  }
 
   function animatePenguin() {
 
@@ -178,7 +155,7 @@ document.addEventListener("DOMContentLoaded", () => {
           femalePenguin.classList.add("kiss");
           femalePenguin.classList.add("blushing");
 
-          triggerCelebration(loveTargetX, loveTargetY);
+         triggerCelebration(loveTargetX, loveTargetY);
 
           setTimeout(() => {
             lovePhase = "walkaway";
