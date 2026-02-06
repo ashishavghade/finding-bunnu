@@ -31,6 +31,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const speed = 1.6;
 
+  const heartRain = document.getElementById("heart-rain");
+  let rainStarted = false;
+
   const frames = [
     "assets/images/penguin_walk01.png",
     "assets/images/penguin_walk02.png",
@@ -111,7 +114,28 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => b.remove(), 6000);
   }
 
- 
+ function startHeartRain() {
+  if (rainStarted) return;
+  rainStarted = true;
+
+  setInterval(() => {
+    const heart = document.createElement("div");
+    heart.className = "rain-heart";
+    heart.innerHTML = "💗";
+
+    const size = Math.random() * 30 + 15; // different sizes
+    heart.style.fontSize = size + "px";
+
+    heart.style.left = Math.random() * window.innerWidth + "px";
+    heart.style.animationDuration = (Math.random() * 4 + 4) + "s";
+
+    heartRain.appendChild(heart);
+
+    setTimeout(() => heart.remove(), 8000);
+
+  }, 400); // controls density (increase to reduce density)
+}
+
 
   function spawnSparkle() {
     const s = document.createElement("div");
@@ -223,6 +247,8 @@ document.addEventListener("DOMContentLoaded", () => {
     /* ========= KISS ========= */
 
     else if (state === "kiss") {
+
+      startHeartRain();
 
       const zoom = 1 + (timer / 360) * 0.12;
       stage.style.transform = `scale(${zoom})`;
