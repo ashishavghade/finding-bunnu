@@ -23,16 +23,31 @@
 }
 
 /* =========================
-   🎬 STAGE
+   🎬 STAGE ZOOM
 ========================= */
 
 #content {
   transform-origin: center center;
-  transition: transform 0.3s linear;
+  transition: transform 0.2s linear;
 }
 
 /* =========================
-   🐧 PENGUINS
+   🎆 CELEBRATION LAYER
+========================= */
+
+#celebration-layer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 100;
+  overflow: hidden;
+}
+
+/* =========================
+   🐧 PENGUIN STRUCTURE
 ========================= */
 
 #penguin-container {
@@ -40,7 +55,7 @@
   top: 0;
   left: 0;
   pointer-events: none;
-  z-index: 20;
+  z-index: 30;
 }
 
 #male-penguin,
@@ -57,29 +72,49 @@
   opacity: 1;
 }
 
+/* Wrapper allows flipping without breaking face alignment */
+.penguin-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
 /* =========================
-   ❤️ HEART EYES (FIXED)
+   ❤️ FACE + HEART EYES
 ========================= */
+
+.face {
+  position: absolute;
+  top: 22px;          /* adjust if needed */
+  left: 0;
+  width: 100%;
+  height: 20px;
+  pointer-events: none;
+}
 
 .heart-eye {
   position: absolute;
-  font-size: 12px;
+  font-size: 14px;
+  opacity: 0;
   animation: beat 0.8s infinite;
+  transition: opacity 1s ease;
 }
 
-.heart-eye.left {
-  top: 26px;
+.left-eye {
   left: 20px;
 }
 
-.heart-eye.right {
-  top: 26px;
+.right-eye {
   right: 20px;
+}
+
+.show-hearts .heart-eye {
+  opacity: 1;
 }
 
 @keyframes beat {
   0% { transform: scale(1); }
-  50% { transform: scale(1.3); }
+  50% { transform: scale(1.4); }
   100% { transform: scale(1); }
 }
 
@@ -133,7 +168,7 @@
 }
 
 /* =========================
-   🎆 FIREWORKS (UPGRADED)
+   🎆 FIREWORKS
 ========================= */
 
 .firework {
@@ -151,42 +186,42 @@
   }
   100% {
     opacity: 0;
-    transform: scale(10);
+    transform: scale(14);
   }
 }
 
 /* =========================
-   💗 BALLOONS (BOLLYWOOD)
+   💗 BALLOONS
 ========================= */
 
 .balloon {
   position: absolute;
-  font-size: 24px;
+  font-size: 26px;
   animation: floatBalloon 6s linear forwards;
 }
 
 @keyframes floatBalloon {
   0% {
-    transform: translateY(0);
+    transform: translateY(0) translateX(0);
     opacity: 1;
   }
   100% {
-    transform: translateY(-600px);
+    transform: translateY(-600px) translateX(40px);
     opacity: 0;
   }
 }
 
 /* =========================
-   ✨ SPARKLES (FIXED CLASS)
+   ✨ SPARKLES
 ========================= */
 
 .sparkle {
   position: absolute;
-  width: 5px;
-  height: 5px;
+  width: 6px;
+  height: 6px;
   background: white;
   border-radius: 50%;
-  box-shadow: 0 0 8px white;
+  box-shadow: 0 0 10px white;
   animation: sparkleAnim 1s ease-out forwards;
 }
 
@@ -196,13 +231,13 @@
 }
 
 /* =========================
-   ❄ SNOW
+   ❄ SNOW (if used)
 ========================= */
 
 .snowflake {
   position: fixed;
   top: -10px;
-  font-size: 10px;
+  font-size: 12px;
   animation: fall 8s linear infinite;
   opacity: 0.8;
 }
