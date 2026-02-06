@@ -76,38 +76,32 @@ document.addEventListener("DOMContentLoaded", () => {
    /* =========================
      No-btn chase
   ========================= */
+let offsetX = 0;
+let offsetY = 0;
+
 document.addEventListener("mousemove", (e) => {
 
   if (!noBtn) return;
 
   const rect = noBtn.getBoundingClientRect();
 
-  const btnX = rect.left + rect.width / 2;
-  const btnY = rect.top + rect.height / 2;
+  const centerX = rect.left + rect.width / 2;
+  const centerY = rect.top + rect.height / 2;
 
-  const dx = e.clientX - btnX;
-  const dy = e.clientY - btnY;
+  const dx = centerX - e.clientX;
+  const dy = centerY - e.clientY;
 
   const distance = Math.hypot(dx, dy);
 
-  if (distance < 120) {
+  if (distance < 70) {
 
-    const moveX = (Math.random() - 0.5) * 300;
-    const moveY = (Math.random() - 0.5) * 200;
+    const angle = Math.atan2(dy, dx);
+    const moveDistance = 150;
 
-    const newLeft = Math.min(
-      window.innerWidth - rect.width,
-      Math.max(0, rect.left + moveX)
-    );
+    offsetX += Math.cos(angle) * moveDistance;
+    offsetY += Math.sin(angle) * moveDistance;
 
-    const newTop = Math.min(
-      window.innerHeight - rect.height,
-      Math.max(0, rect.top + moveY)
-    );
-
-    noBtn.style.position = "fixed";
-    noBtn.style.left = newLeft + "px";
-    noBtn.style.top = newTop + "px";
+    noBtn.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
   }
 });
 
