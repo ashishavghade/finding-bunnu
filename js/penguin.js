@@ -19,6 +19,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const noBtn = document.getElementById("no-btn");
 
+  if (noBtn) {
+  const rect = noBtn.getBoundingClientRect();
+  noBtn.style.position = "fixed";
+  noBtn.style.left = rect.left + "px";
+  noBtn.style.top = rect.top + "px";
+}
+
   let state = "idle";
   let timer = 0;
 
@@ -81,35 +88,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const rect = noBtn.getBoundingClientRect();
 
-  const btnX = rect.left + rect.width / 2;
-  const btnY = rect.top + rect.height / 2;
+  const btnCenterX = rect.left + rect.width / 2;
+  const btnCenterY = rect.top + rect.height / 2;
 
-  const dx = e.clientX - btnX;
-  const dy = e.clientY - btnY;
+  const dx = btnCenterX - e.clientX;
+  const dy = btnCenterY - e.clientY;
 
   const distance = Math.hypot(dx, dy);
 
-  // Trigger only when SUPER close
-  if (distance < 80) {
+  // Only react when VERY close
+  if (distance < 70) {
 
-    const padding = 150; // how far it runs
+    const moveDistance = 180; // how far it runs
 
-    let newLeft = Math.random() * (window.innerWidth - rect.width - padding);
-    let newTop = Math.random() * (window.innerHeight - rect.height - padding);
+    const angle = Math.atan2(dy, dx);
 
-    // Push farther from cursor direction
-    if (dx > 0) newLeft -= padding;
-    else newLeft += padding;
+    let newLeft = rect.left + Math.cos(angle) * moveDistance;
+    let newTop  = rect.top  + Math.sin(angle) * moveDistance;
 
-    if (dy > 0) newTop -= padding;
-    else newTop += padding;
-
-    // Clamp inside screen
+    // Keep inside screen
     newLeft = Math.max(20, Math.min(window.innerWidth - rect.width - 20, newLeft));
-    newTop = Math.max(20, Math.min(window.innerHeight - rect.height - 20, newTop));
+    newTop  = Math.max(20, Math.min(window.innerHeight - rect.height - 20, newTop));
 
     noBtn.style.left = newLeft + "px";
-    noBtn.style.top = newTop + "px";
+    noBtn.style.top  = newTop + "px";
   }
 });
 
