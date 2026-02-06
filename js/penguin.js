@@ -76,9 +76,6 @@ document.addEventListener("DOMContentLoaded", () => {
    /* =========================
      No-btn chase
   ========================= */
-let offsetX = 0;
-let offsetY = 0;
-
 document.addEventListener("mousemove", (e) => {
 
   if (!noBtn) return;
@@ -93,15 +90,22 @@ document.addEventListener("mousemove", (e) => {
 
   const distance = Math.hypot(dx, dy);
 
-  if (distance < 70) {
+  if (distance < 80) {
 
+    const moveDistance = 120;
     const angle = Math.atan2(dy, dx);
-    const moveDistance = 150;
 
-    offsetX += Math.cos(angle) * moveDistance;
-    offsetY += Math.sin(angle) * moveDistance;
+    let newX = rect.left + Math.cos(angle) * moveDistance;
+    let newY = rect.top + Math.sin(angle) * moveDistance;
 
-    noBtn.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+    // Clamp inside viewport
+    newX = Math.max(20, Math.min(window.innerWidth - rect.width - 20, newX));
+    newY = Math.max(20, Math.min(window.innerHeight - rect.height - 20, newY));
+
+    const translateX = newX - rect.left;
+    const translateY = newY - rect.top;
+
+    noBtn.style.transform = `translate(${translateX}px, ${translateY}px)`;
   }
 });
 
