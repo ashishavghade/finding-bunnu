@@ -245,3 +245,35 @@
 @keyframes fall {
   to { transform: translateY(110vh); }
 }
+#heart-rain {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 90;
+  overflow: hidden;
+}
+
+.rain-heart {
+  position: absolute;
+  animation: floatUp linear infinite;
+  opacity: 0.85;
+  filter: drop-shadow(0 0 6px hotpink);
+}
+
+@keyframes floatUp {
+  from {
+    transform: translateY(110vh);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-20vh);
+    opacity: 0;
+  }
+}
+
