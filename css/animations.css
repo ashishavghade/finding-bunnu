@@ -187,3 +187,7 @@
   0%   { opacity: 1; transform: translate(0,0); }
   100% { opacity: 0; transform: translate(200px,-200px); }
 }
+@keyframes fadeFlash {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
