@@ -96,3 +96,59 @@
   50% { transform: translate(-50%, -50%) scale(1.1); }
   100% { transform: translate(-50%, -50%) scale(1); }
 }
+#female-penguin {
+  position: absolute;
+  width: 80px;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+#female-penguin.show {
+  opacity: 1;
+}
+
+/* 🎀 Bow */
+#female-penguin .bow {
+  position: absolute;
+  top: -8px;
+  right: 10px;
+  width: 18px;
+  height: 12px;
+  background: hotpink;
+  border-radius: 6px;
+}
+
+#female-penguin .bow::before,
+#female-penguin .bow::after {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 12px;
+  background: pink;
+  border-radius: 50%;
+}
+
+#female-penguin .bow::before {
+  left: -8px;
+}
+
+#female-penguin .bow::after {
+  right: -8px;
+}
+
+/* 🌸 Blush */
+#female-penguin .blush {
+  position: absolute;
+  bottom: 25px;
+  left: 20px;
+  width: 40px;
+  height: 15px;
+  background: radial-gradient(circle, rgba(255,100,150,0.7) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+#female-penguin.blushing .blush {
+  opacity: 1;
+}
