@@ -1,17 +1,10 @@
 /* 💗 Heart Cursor */
 #heart-cursor {
   position: fixed;
-  width: 28px;
-  height: 28px;
-  pointer-events: none;
-  z-index: 10;
-  transform: translate(-50%, -50%);
-}
-
-#heart-cursor::before {
-  content: "💗";
   font-size: 24px;
-  display: block;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
   animation: pulse 1.5s infinite ease-in-out;
   filter: drop-shadow(0 0 8px rgba(255, 182, 217, 0.8));
 }
