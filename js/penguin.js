@@ -7,9 +7,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const malePenguinImg = document.querySelector("#male-penguin .penguin-inner");
 
   const femalePenguin = document.getElementById("female-penguin");
-  const femalePenguinImg = document.querySelector("#female-penguin .penguin-inner");
 
   const cursor = document.getElementById("heart-cursor");
+  const celebrationLayer = document.getElementById("celebration-layer");
 
   let penguinX = window.innerWidth / 2;
   let penguinY = window.innerHeight / 2;
@@ -53,7 +53,6 @@ document.addEventListener("DOMContentLoaded", () => {
     chasing = false;
     cinematicMode = true;
 
-    // spawn opposite side
     const isMaleLeft = penguinX < window.innerWidth / 2;
 
     loveTargetX = isMaleLeft ? window.innerWidth - 200 : 200;
@@ -63,10 +62,9 @@ document.addEventListener("DOMContentLoaded", () => {
     femalePenguin.style.top = loveTargetY + "px";
     femalePenguin.classList.add("show");
 
-    // flip female to face male
-    const femaleDirection = isMaleLeft ? -1 : 1;
+    // female faces male
     femalePenguin.style.transform =
-      `translate(-50%, -50%) scaleX(${femaleDirection})`;
+      `translate(-50%, -50%) scaleX(${isMaleLeft ? -1 : 1})`;
 
     lovePhase = "approach";
   });
@@ -76,8 +74,31 @@ document.addEventListener("DOMContentLoaded", () => {
     if (frameTimer > 8) {
       currentFrame = (currentFrame + 1) % walkFrames.length;
       malePenguinImg.src = walkFrames[currentFrame];
-      femalePenguinImg.src = walkFrames[currentFrame];
       frameTimer = 0;
+    }
+  }
+
+  function triggerCelebration(x, y) {
+
+    // hearts
+    for (let i = 0; i < 15; i++) {
+      const heart = document.createElement("div");
+      heart.className = "heart-particle";
+      heart.innerHTML = "💗";
+      heart.style.left = x + (Math.random() * 80 - 40) + "px";
+      heart.style.top = y + (Math.random() * 40 - 20) + "px";
+      celebrationLayer.appendChild(heart);
+      setTimeout(() => heart.remove(), 1500);
+    }
+
+    // stars
+    for (let i = 0; i < 8; i++) {
+      const star = document.createElement("div");
+      star.className = "star-particle";
+      star.style.left = x + "px";
+      star.style.top = y + "px";
+      celebrationLayer.appendChild(star);
+      setTimeout(() => star.remove(), 1000);
     }
   }
 
@@ -128,7 +149,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (lovePhase === "approach") {
 
-        if (distance > 30) {
+        if (distance > 40) {
 
           const dirX = dx / distance;
           const dirY = dy / distance;
@@ -145,24 +166,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
           lovePhase = "kiss";
 
-          // adjust spacing so they don't overlap
-          const spacing = 40;
+          const spacing = 35;
 
-          if (penguinX < loveTargetX) {
-            malePenguin.style.left = (loveTargetX - spacing) + "px";
-            femalePenguin.style.left = (loveTargetX + spacing) + "px";
-          } else {
-            malePenguin.style.left = (loveTargetX + spacing) + "px";
-            femalePenguin.style.left = (loveTargetX - spacing) + "px";
-          }
+          malePenguin.style.left =
+            (loveTargetX < penguinX ? loveTargetX + spacing : loveTargetX - spacing) + "px";
+
+          femalePenguin.style.left =
+            (loveTargetX < penguinX ? loveTargetX - spacing : loveTargetX + spacing) + "px";
 
           malePenguin.classList.add("kiss");
           femalePenguin.classList.add("kiss");
           femalePenguin.classList.add("blushing");
 
+          triggerCelebration(loveTargetX, loveTargetY);
+
           setTimeout(() => {
             lovePhase = "walkaway";
-          }, 800);
+          }, 900);
         }
       }
 
@@ -173,6 +193,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
         malePenguin.style.left = penguinX + "px";
         femalePenguin.style.left = loveTargetX + "px";
+
+        // both face right while leaving
+        malePenguin.style.transform =
+          `translate(-50%, -50%) scaleX(1)`;
+        femalePenguin.style.transform =
+          `translate(-50%, -50%) scaleX(1)`;
 
         updateWalkFrame();
 
