@@ -42,7 +42,6 @@ document.addEventListener("DOMContentLoaded", () => {
   let tick = 0;
 
   let balloonTick = 0;
-  let fireworkTick = 0;
   let sparkleTick = 0;
 
   /* =========================
@@ -112,17 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => b.remove(), 6000);
   }
 
-  function spawnFirework(x, y) {
-    for (let i = 0; i < 20; i++) {
-      const f = document.createElement("div");
-      f.className = "firework";
-      f.style.left = x + "px";
-      f.style.top = y + "px";
-      f.style.background = `hsl(${Math.random()*360},100%,60%)`;
-      celebrationLayer.appendChild(f);
-      setTimeout(() => f.remove(), 1000);
-    }
-  }
+ 
 
   function spawnSparkle() {
     const s = document.createElement("div");
@@ -239,17 +228,11 @@ document.addEventListener("DOMContentLoaded", () => {
       stage.style.transform = `scale(${zoom})`;
 
       balloonTick++;
-      fireworkTick++;
       sparkleTick++;
 
       if (balloonTick > 10) {
         spawnBalloon(centerX, centerY);
         balloonTick = 0;
-      }
-
-      if (fireworkTick > 45) {
-        spawnFirework(centerX, centerY);
-        fireworkTick = 0;
       }
 
       if (sparkleTick > 6) {
