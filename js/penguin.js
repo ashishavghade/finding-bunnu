@@ -123,7 +123,7 @@ document.addEventListener("DOMContentLoaded", () => {
     heart.className = "rain-heart";
     heart.innerHTML = "💗";
 
-    const size = Math.random() * 30 + 15; // different sizes
+    const size = Math.random() * 30 + 25; // different sizes
     heart.style.fontSize = size + "px";
 
     heart.style.left = Math.random() * window.innerWidth + "px";
