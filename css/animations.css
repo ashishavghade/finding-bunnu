@@ -12,25 +12,43 @@
 
 #heart-cursor .heart {
   font-size: 24px;
-  display: inline-block;
   animation: pulse 1.5s infinite ease-in-out;
   filter: drop-shadow(0 0 8px rgba(255, 182, 217, 0.8));
 }
 
 @keyframes pulse {
-  0%   { transform: scale(1); }
-  50%  { transform: scale(1.2); }
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
   100% { transform: scale(1); }
 }
 
-.love-mode .heart {
-  filter: drop-shadow(0 0 18px hotpink);
-  animation: pulse 0.6s infinite ease-in-out;
+/* =========================
+   🎬 STAGE & OVERLAY
+========================= */
+
+#stage {
+  transform-origin: center center;
+  transition: transform 6s linear;
 }
 
+#cinematic-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  pointer-events: none;
+  z-index: 5;
+  transition: background 1s ease;
+}
+
+.overlay-dim {
+  background: rgba(20, 0, 30, 0.5);
+}
 
 /* =========================
-   🐧 PENGUIN CONTAINER
+   🐧 PENGUINS
 ========================= */
 
 #penguin-container {
@@ -38,13 +56,8 @@
   top: 0;
   left: 0;
   pointer-events: none;
-  z-index: 8;
+  z-index: 10;
 }
-
-
-/* =========================
-   🐧 MALE & FEMALE BASE
-========================= */
 
 #male-penguin,
 #female-penguin {
@@ -60,14 +73,38 @@
   opacity: 1;
 }
 
+/* =========================
+   ❤️ HEART EYES
+========================= */
+
+.heart-eye {
+  position: absolute;
+  font-size: 10px;
+  opacity: 0;
+  transition: opacity 2s ease;
+}
+
+.left-eye {
+  top: 28px;
+  left: 22px;
+}
+
+.right-eye {
+  top: 28px;
+  right: 22px;
+}
+
+.show-eyes .heart-eye {
+  opacity: 1;
+}
 
 /* =========================
-   🎀 BOW (Stable Position)
+   🎀 BOW
 ========================= */
 
 #female-penguin .bow {
   position: absolute;
-  top: 6px;          /* sits on head */
+  top: 6px;
   left: 50%;
   transform: translateX(-50%);
   width: 16px;
@@ -87,17 +124,11 @@
   top: 0;
 }
 
-#female-penguin .bow::before {
-  left: -6px;
-}
-
-#female-penguin .bow::after {
-  right: -6px;
-}
-
+#female-penguin .bow::before { left: -6px; }
+#female-penguin .bow::after { right: -6px; }
 
 /* =========================
-   🌸 BLUSH (Centered Cheeks)
+   🌸 BLUSH
 ========================= */
 
 #female-penguin .blush {
@@ -109,85 +140,89 @@
   height: 16px;
   background: radial-gradient(circle, rgba(255,120,160,0.9) 0%, transparent 70%);
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: opacity 1s ease;
 }
 
 #female-penguin.blushing .blush {
   opacity: 1;
 }
 
-
 /* =========================
-   🫁 BREATHING (Inner Only)
+   💋 KISS LEAN
 ========================= */
 
-.penguin-inner.idle {
-  animation: breathe 2.5s ease-in-out infinite;
+.lean-in {
+  animation: lean 2s ease forwards;
 }
 
-@keyframes breathe {
-  0%   { transform: scale(1); }
-  50%  { transform: scale(1.03); }
-  100% { transform: scale(1); }
+@keyframes lean {
+  0% { transform: translate(-50%, -50%) scale(1); }
+  100% { transform: translate(-50%, -50%) scale(1.05); }
 }
-
 
 /* =========================
-   💋 KISS BOUNCE (Safe)
+   🎆 FIREWORKS
 ========================= */
 
-.kiss {
-  animation: kissBounce 0.4s ease-in-out 3;
-}
-
-@keyframes kissBounce {
-  0%   { transform: translate(-50%, -50%) scale(1); }
-  50%  { transform: translate(-50%, -50%) scale(1.08); }
-  100% { transform: translate(-50%, -50%) scale(1); }
-}
-
-
-/* =========================
-   💗 CELEBRATION EFFECTS
-========================= */
-
-#celebration-layer {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  overflow: hidden;
-  z-index: 20;
-}
-
-.heart-particle {
-  position: absolute;
-  font-size: 20px;
-  animation: floatUp 1.5s ease-out forwards;
-}
-
-@keyframes floatUp {
-  0%   { opacity: 1; transform: translateY(0) scale(1); }
-  100% { opacity: 0; transform: translateY(-150px) scale(1.6); }
-}
-
-.star-particle {
+.firework {
   position: absolute;
   width: 6px;
   height: 6px;
-  background: white;
   border-radius: 50%;
-  box-shadow: 0 0 10px white;
-  animation: shoot 1s ease-out forwards;
+  animation: explode 1s ease-out forwards;
 }
 
-@keyframes shoot {
-  0%   { opacity: 1; transform: translate(0,0); }
-  100% { opacity: 0; transform: translate(200px,-200px); }
+@keyframes explode {
+  0% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(8); }
 }
-@keyframes fadeFlash {
-  0% { opacity: 1; }
-  100% { opacity: 0; }
+
+/* =========================
+   💗 BALLOON HEARTS
+========================= */
+
+.balloon {
+  position: absolute;
+  font-size: 22px;
+  animation: floatBalloon 6s linear forwards;
+}
+
+@keyframes floatBalloon {
+  0% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(-500px); opacity: 0; }
+}
+
+/* =========================
+   ✨ STAR PARTICLES
+========================= */
+
+.star {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: white;
+  border-radius: 50%;
+  box-shadow: 0 0 6px white;
+  animation: sparkle 2s ease-out forwards;
+}
+
+@keyframes sparkle {
+  0% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(4); }
+}
+
+/* =========================
+   ❄ SNOW
+========================= */
+
+.snowflake {
+  position: fixed;
+  top: -10px;
+  font-size: 10px;
+  animation: fall 8s linear infinite;
+  opacity: 0.8;
+}
+
+@keyframes fall {
+  to { transform: translateY(110vh); }
 }
