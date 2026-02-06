@@ -11,75 +11,91 @@
 </head>
 <body>
 
-  <!-- 🌸 Background Effects Layer -->
-  <div id="background-effects"></div>
+  <!-- 🎬 STAGE (Everything cinematic lives here) -->
+  <div id="stage">
 
-  <!-- 💌 Main Content -->
-  <div id="content">
+    <!-- 🌸 Background Effects Layer -->
+    <div id="background-effects"></div>
 
-    <!-- 1️⃣ Hero Section -->
-    <section id="hero">
-      <h1 class="fade-in">Hi Bunnu 💗</h1>
-      <p class="fade-in-delay">I made you something…</p>
-      <button id="enter-btn">✨ Step Inside ✨</button>
-    </section>
+    <!-- 💌 Main Content -->
+    <div id="content">
 
-    <!-- 2️⃣ Memory Section -->
-    <section id="memories">
-      <h2>Our Little Story</h2>
-      <div class="memory-container">
+      <!-- 1️⃣ Hero Section -->
+      <section id="hero">
+        <h1 class="fade-in">Hi Bunnu 💗</h1>
+        <p class="fade-in-delay">I made you something…</p>
+        <button id="enter-btn">✨ Step Inside ✨</button>
+      </section>
 
-        <!-- Memory Card 1 -->
-        <div class="memory-card">
-          <img src="assets/images/memory1.jpg" alt="Memory 1">
-          <p>The day everything changed 💞</p>
+      <!-- 2️⃣ Memory Section -->
+      <section id="memories">
+        <h2>Our Little Story</h2>
+        <div class="memory-container">
+          <div class="memory-card">
+            <img src="assets/images/memory1.jpg" alt="Memory 1">
+            <p>The day everything changed 💞</p>
+          </div>
         </div>
+      </section>
 
-        <!-- Add more memory cards here -->
+      <!-- 3️⃣ Love Letter Section -->
+      <section id="letter">
+        <h2>A Little Note For You</h2>
+        <div id="typed-letter"></div>
+        <p class="inspect-hint">Psst… open inspect element 💗</p>
+      </section>
 
+      <!-- 4️⃣ Final Proposal Section -->
+      <section id="proposal">
+        <h2>Will you be my Valentine again?</h2>
+        <div class="proposal-buttons">
+          <button id="yes-btn">💗 YES</button>
+          <button id="always-btn">💞 ALWAYS</button>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- 🐧 Penguin Container -->
+    <div id="penguin-container">
+
+      <div id="male-penguin">
+        <img class="penguin-inner" src="assets/images/penguin_walk01.png" />
+        <div class="heart-eye left-eye">❤️</div>
+        <div class="heart-eye right-eye">❤️</div>
       </div>
-    </section>
 
-    <!-- 3️⃣ Love Letter Section -->
-    <section id="letter">
-      <h2>A Little Note For You</h2>
-      <div id="typed-letter"></div>
-      <p class="inspect-hint">Psst… open inspect element 💗</p>
-    </section>
-
-    <!-- 4️⃣ Final Proposal Section -->
-    <section id="proposal">
-      <h2>Will you be my Valentine again?</h2>
-      <div class="proposal-buttons">
-        <button id="yes-btn">💗 YES</button>
-        <button id="always-btn">💞 ALWAYS</button>
+      <div id="female-penguin">
+        <img class="penguin-inner" src="assets/images/penguin_walk01.png" />
+        <div class="bow"></div>
+        <div class="blush"></div>
+        <div class="heart-eye left-eye">❤️</div>
+        <div class="heart-eye right-eye">❤️</div>
       </div>
-    </section>
+
+    </div>
 
   </div>
-  <!-- 🐧 Penguin Container -->
- <div id="penguin-container">
-  <div id="male-penguin">
-    <img class="penguin-inner" src="assets/images/penguin_walk01.png" />
-  </div>
 
-  <div id="female-penguin">
-  <img class="penguin-inner" src="assets/images/penguin_walk01.png" />
-  <div class="bow"></div>
-  <div class="blush"></div>
-</div>
-</div>
   <!-- 💗 Custom Heart Cursor -->
-<div id="heart-cursor">
-  <span class="heart">💗</span>
-</div>
+  <div id="heart-cursor">
+    <span class="heart">💗</span>
+  </div>
+
+  <!-- 🎆 Celebration Layer -->
+  <div id="celebration-layer"></div>
+
+  <!-- 🎭 Cinematic Overlay -->
+  <div id="cinematic-overlay"></div>
 
   <!-- 🎵 Background Music -->
   <audio id="bg-music" src="assets/music/song.mp3"></audio>
 
+  <!-- Scripts -->
   <script src="js/cursor.js"></script>
   <script src="js/penguin.js"></script>
   <script src="js/celebration.js"></script>
+  <script src="js/cinematic.js"></script>
 
   <!-- 💌 Hidden Message -->
   <!-- If you're reading this, I love you more than penguins love snow 💗 -->
