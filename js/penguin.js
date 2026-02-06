@@ -76,41 +76,38 @@ document.addEventListener("DOMContentLoaded", () => {
    /* =========================
      No-btn chase
   ========================= */
- let noLocked = false;
-
 document.addEventListener("mousemove", (e) => {
 
   if (!noBtn) return;
 
-  // Lock position only when first needed
-  if (!noLocked) {
-    const rect = noBtn.getBoundingClientRect();
-    noBtn.style.position = "fixed";
-    noBtn.style.left = rect.left + "px";
-    noBtn.style.top = rect.top + "px";
-    noLocked = true;
-  }
-
   const rect = noBtn.getBoundingClientRect();
 
-  const dx = rect.left + rect.width / 2 - e.clientX;
-  const dy = rect.top + rect.height / 2 - e.clientY;
+  const btnX = rect.left + rect.width / 2;
+  const btnY = rect.top + rect.height / 2;
+
+  const dx = e.clientX - btnX;
+  const dy = e.clientY - btnY;
 
   const distance = Math.hypot(dx, dy);
 
-  if (distance < 70) {
+  if (distance < 120) {
 
-    const angle = Math.atan2(dy, dx);
-    const moveDistance = 180;
+    const moveX = (Math.random() - 0.5) * 300;
+    const moveY = (Math.random() - 0.5) * 200;
 
-    let newLeft = rect.left + Math.cos(angle) * moveDistance;
-    let newTop  = rect.top  + Math.sin(angle) * moveDistance;
+    const newLeft = Math.min(
+      window.innerWidth - rect.width,
+      Math.max(0, rect.left + moveX)
+    );
 
-    newLeft = Math.max(20, Math.min(window.innerWidth - rect.width - 20, newLeft));
-    newTop  = Math.max(20, Math.min(window.innerHeight - rect.height - 20, newTop));
+    const newTop = Math.min(
+      window.innerHeight - rect.height,
+      Math.max(0, rect.top + moveY)
+    );
 
+    noBtn.style.position = "fixed";
     noBtn.style.left = newLeft + "px";
-    noBtn.style.top  = newTop + "px";
+    noBtn.style.top = newTop + "px";
   }
 });
 
