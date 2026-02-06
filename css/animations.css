@@ -47,3 +47,20 @@
 #male-penguin.show {
   opacity: 1;
 }
+.idle {
+  animation: breathe 2.5s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  0%   { transform: translate(-50%, -50%) scale(1); }
+  50%  { transform: translate(-50%, -50%) scale(1.03); }
+  100% { transform: translate(-50%, -50%) scale(1); }
+}
+.blink {
+  animation: blink 4s infinite;
+}
+
+@keyframes blink {
+  0%, 95%, 100% { filter: none; }
+  97% { transform: translate(-50%, -50%) scaleY(0.1); }
+}
