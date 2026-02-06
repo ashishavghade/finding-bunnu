@@ -3,27 +3,27 @@ document.addEventListener("DOMContentLoaded", () => {
   const enterBtn = document.getElementById("enter-btn");
   const yesBtn = document.getElementById("yes-btn");
 
-  const stage = document.getElementById("stage");
-  const overlay = document.getElementById("cinematic-overlay");
-
   const male = document.getElementById("male-penguin");
   const female = document.getElementById("female-penguin");
-
   const maleImg = male.querySelector(".penguin-inner");
 
+  const stage = document.getElementById("content");
   const celebrationLayer = document.getElementById("celebration-layer");
-
-  let mx = window.innerWidth / 2;
-  let my = window.innerHeight / 2;
-
-  let cx = mx;
-  let cy = my;
 
   let state = "idle";
   let timer = 0;
 
-  let centerX = window.innerWidth / 2;
-  let centerY = window.innerHeight / 2;
+  let mx = window.innerWidth / 2;
+  let my = window.innerHeight / 2;
+
+  let fx = 0;
+  let fy = window.innerHeight / 2;
+
+  let cx = mx;
+  let cy = my;
+
+  const centerX = window.innerWidth / 2;
+  const centerY = window.innerHeight / 2;
 
   const speed = 1.3;
 
@@ -50,16 +50,13 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   yesBtn.addEventListener("click", () => {
-
     document.body.style.pointerEvents = "none";
-    overlay.classList.add("overlay-dim");
 
     state = "approach";
     timer = 0;
 
-    // spawn female opposite side
     const spawnLeft = mx < window.innerWidth / 2;
-    const fx = spawnLeft ? window.innerWidth - 150 : 150;
+    fx = spawnLeft ? window.innerWidth - 150 : 150;
 
     female.style.left = fx + "px";
     female.style.top = centerY + "px";
@@ -75,37 +72,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  function spawnFireworkBurst(x, y) {
-    for (let i = 0; i < 25; i++) {
-      const f = document.createElement("div");
-      f.className = "firework";
-      f.style.left = x + "px";
-      f.style.top = y + "px";
-      f.style.background = `hsl(${Math.random()*360},100%,60%)`;
-      celebrationLayer.appendChild(f);
-      setTimeout(() => f.remove(), 1000);
-    }
-  }
+  function spawnHeart(x, y) {
+    if (!celebrationLayer) return;
 
-  function spawnBalloon(x, y) {
-    const b = document.createElement("div");
-    b.className = "balloon";
-    b.innerHTML = "💗";
-    b.style.left = (x + Math.random()*200 - 100) + "px";
-    b.style.top = y + "px";
-    celebrationLayer.appendChild(b);
-    setTimeout(() => b.remove(), 6000);
-  }
-
-  function startSnow() {
-    setInterval(() => {
-      const s = document.createElement("div");
-      s.className = "snowflake";
-      s.innerHTML = "❄";
-      s.style.left = Math.random()*window.innerWidth + "px";
-      celebrationLayer.appendChild(s);
-      setTimeout(() => s.remove(), 8000);
-    }, 300);
+    const h = document.createElement("div");
+    h.className = "heart-particle";
+    h.innerHTML = "💗";
+    h.style.left = x + "px";
+    h.style.top = y + "px";
+    celebrationLayer.appendChild(h);
+    setTimeout(() => h.remove(), 1500);
   }
 
   function animate() {
@@ -131,27 +107,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
     else if (state === "approach") {
 
-      // true midpoint approach
-      const maleTargetX = centerX - 40;
-      const femaleTargetX = centerX + 40;
+      const maleTarget = centerX - 40;
+      const femaleTarget = centerX + 40;
 
-      const dx = maleTargetX - mx;
-      const dist = Math.abs(dx);
+      mx += (maleTarget - mx) * 0.05;
+      fx += (femaleTarget - fx) * 0.05;
 
-      if (dist > 2) {
-        mx += dx * 0.05;
+      male.style.left = mx + "px";
+      male.style.top = centerY + "px";
 
-        male.style.left = mx + "px";
-        male.style.top = centerY + "px";
+      female.style.left = fx + "px";
+      female.style.top = centerY + "px";
 
-        female.style.left = female.offsetLeft + (femaleTargetX - female.offsetLeft) * 0.05 + "px";
+      male.style.transform = "translate(-50%, -50%) scaleX(1)";
+      female.style.transform = "translate(-50%, -50%) scaleX(-1)";
 
-        male.style.transform = `translate(-50%, -50%) scaleX(1)`;
-        female.style.transform = `translate(-50%, -50%) scaleX(-1)`;
+      updateWalk();
 
-        updateWalk();
-
-      } else {
+      if (Math.abs(maleTarget - mx) < 2) {
         state = "pause";
         timer = 0;
       }
@@ -160,19 +133,17 @@ document.addEventListener("DOMContentLoaded", () => {
     else if (state === "pause") {
 
       timer++;
-      if (timer > 150) {
+      if (timer > 120) {
         state = "lean";
         timer = 0;
-        male.classList.add("show-eyes");
-        female.classList.add("show-eyes");
         female.classList.add("blushing");
       }
     }
 
     else if (state === "lean") {
 
-      male.style.left = (centerX - 30) + "px";
-      female.style.left = (centerX + 30) + "px";
+      male.style.left = (centerX - 25) + "px";
+      female.style.left = (centerX + 25) + "px";
 
       timer++;
       if (timer > 120) {
@@ -183,18 +154,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     else if (state === "kiss") {
 
-      // gradual zoom in
-      const scale = 1 + (timer / 360) * 0.12;
-      stage.style.transform = `scale(${scale})`;
+      const zoom = 1 + (timer / 360) * 0.1;
+      stage.style.transform = `scale(${zoom})`;
 
-      // continuous fireworks
-      if (timer % 40 === 0) {
-        spawnFireworkBurst(centerX, centerY);
-      }
-
-      // continuous balloons
       if (timer % 20 === 0) {
-        spawnBalloon(centerX, centerY);
+        spawnHeart(centerX, centerY);
       }
 
       timer++;
@@ -210,31 +174,23 @@ document.addEventListener("DOMContentLoaded", () => {
       if (timer > 120) {
         state = "walkaway";
         timer = 0;
-        startSnow();
       }
     }
 
     else if (state === "walkaway") {
 
-      stage.style.transform = "scale(1)"; // zoom out
+      stage.style.transform = "scale(1)";
 
       mx += 1.5;
+      fx += 1.5;
 
       male.style.left = mx + "px";
-      female.style.left = (mx + 70) + "px";
+      female.style.left = fx + "px";
 
-      male.style.transform = `translate(-50%, -50%) scaleX(1)`;
-      female.style.transform = `translate(-50%, -50%) scaleX(1)`;
+      male.style.transform = "translate(-50%, -50%) scaleX(1)";
+      female.style.transform = "translate(-50%, -50%) scaleX(1)";
 
       updateWalk();
-
-      if (mx > window.innerWidth + 150) {
-        state = "fade";
-      }
-    }
-
-    else if (state === "fade") {
-      overlay.style.background = "rgba(255,200,230,0.9)";
     }
 
     requestAnimationFrame(animate);
