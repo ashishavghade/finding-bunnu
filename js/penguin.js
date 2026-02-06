@@ -33,29 +33,46 @@ document.addEventListener("DOMContentLoaded", () => {
   
 function animatePenguin() {
 
+ const walkFrames = [
+  "assets/images/penguin_walk01.png",
+  "assets/images/penguin_walk02.png",
+  "assets/images/penguin_walk03.png",
+  "assets/images/penguin_walk04.png"
+];
+
+let currentFrame = 0;
+let frameTimer = 0;
+
+function animatePenguin() {
+
   if (chasing) {
 
-    // Smooth chase movement
     penguinX += (cursorX - penguinX) * speed;
     penguinY += (cursorY - penguinY) * speed;
 
     penguin.style.left = penguinX + "px";
     penguin.style.top = penguinY + "px";
 
-    // Distance from cursor
     const distance = Math.hypot(cursorX - penguinX, cursorY - penguinY);
 
-    // Direction flip
     const direction = cursorX < penguinX ? -1 : 1;
 
     penguin.style.transform =
       `translate(-50%, -50%) scaleX(${direction})`;
 
-    // Walking animation toggle
+    // WALK FRAME SWITCHING
     if (distance > 5) {
-      penguin.classList.add("walk");
+
+      frameTimer++;
+
+      if (frameTimer > 8) { // controls animation speed
+        currentFrame = (currentFrame + 1) % walkFrames.length;
+        penguin.src = walkFrames[currentFrame];
+        frameTimer = 0;
+      }
+
     } else {
-      penguin.classList.remove("walk");
+      penguin.src = walkFrames[0];
     }
   }
 
