@@ -89,22 +89,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const distance = Math.hypot(dx, dy);
 
-  if (distance < 120) {
+  // Trigger only when SUPER close
+  if (distance < 80) {
 
-    const moveX = (Math.random() - 0.5) * 300;
-    const moveY = (Math.random() - 0.5) * 200;
+    const padding = 150; // how far it runs
 
-    const newLeft = Math.min(
-      window.innerWidth - rect.width,
-      Math.max(0, rect.left + moveX)
-    );
+    let newLeft = Math.random() * (window.innerWidth - rect.width - padding);
+    let newTop = Math.random() * (window.innerHeight - rect.height - padding);
 
-    const newTop = Math.min(
-      window.innerHeight - rect.height,
-      Math.max(0, rect.top + moveY)
-    );
+    // Push farther from cursor direction
+    if (dx > 0) newLeft -= padding;
+    else newLeft += padding;
 
-    noBtn.style.position = "fixed";
+    if (dy > 0) newTop -= padding;
+    else newTop += padding;
+
+    // Clamp inside screen
+    newLeft = Math.max(20, Math.min(window.innerWidth - rect.width - 20, newLeft));
+    newTop = Math.max(20, Math.min(window.innerHeight - rect.height - 20, newTop));
+
     noBtn.style.left = newLeft + "px";
     noBtn.style.top = newTop + "px";
   }
