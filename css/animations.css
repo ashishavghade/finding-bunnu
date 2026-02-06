@@ -1,3 +1,7 @@
+/* =========================
+   💗 HEART CURSOR
+========================= */
+
 #heart-cursor {
   position: fixed;
   top: 0;
@@ -5,12 +9,25 @@
   pointer-events: none;
   z-index: 9999;
 }
+
 #heart-cursor .heart {
   font-size: 24px;
   display: inline-block;
   animation: pulse 1.5s infinite ease-in-out;
   filter: drop-shadow(0 0 8px rgba(255, 182, 217, 0.8));
 }
+
+@keyframes pulse {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+
+/* =========================
+   🐧 PENGUIN STRUCTURE
+========================= */
+
 #penguin-container {
   position: fixed;
   top: 0;
@@ -21,26 +38,21 @@
 
 #male-penguin {
   position: absolute;
-  font-size: 48px;
+  width: 70px;
+  height: 80px;
   transform: translate(-50%, -50%);
   opacity: 0;
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  transition: opacity 0.6s ease;
 }
 
 #male-penguin.show {
   opacity: 1;
 }
 
-#male-penguin {
-  position: absolute;
-  width: 60px;
-  height: 70px;
-  transform: translate(-50%, -50%);
-}
-
+/* Body */
 .body {
-  width: 60px;
-  height: 60px;
+  width: 70px;
+  height: 70px;
   background: black;
   border-radius: 50%;
   position: absolute;
@@ -48,36 +60,69 @@
   left: 0;
 }
 
+/* Belly */
+.body::after {
+  content: "";
+  width: 40px;
+  height: 45px;
+  background: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 15px;
+  left: 15px;
+}
+
+/* Legs */
 .leg {
-  width: 12px;
-  height: 20px;
+  width: 10px;
+  height: 22px;
   background: orange;
   position: absolute;
   bottom: 0;
   border-radius: 4px;
+  transform-origin: top center;   /* makes legs swing from hip */
 }
 
 .left-leg {
-  left: 12px;
+  left: 18px;
 }
 
 .right-leg {
-  right: 12px;
+  right: 18px;
 }
+
+
+/* =========================
+   🦶 WALKING ANIMATION
+========================= */
+
 .walk .left-leg {
-  animation: walkLeft 0.3s infinite alternate;
+  animation: walkLeft 0.25s infinite linear;
 }
 
 .walk .right-leg {
-  animation: walkRight 0.3s infinite alternate;
+  animation: walkRight 0.25s infinite linear;
+}
+
+/* Body bounce for game feel */
+.walk .body {
+  animation: bodyBob 0.25s infinite linear;
 }
 
 @keyframes walkLeft {
-  from { transform: rotate(20deg); }
-  to   { transform: rotate(-20deg); }
+  0%   { transform: rotate(25deg); }
+  50%  { transform: rotate(-25deg); }
+  100% { transform: rotate(25deg); }
 }
 
 @keyframes walkRight {
-  from { transform: rotate(-20deg); }
-  to   { transform: rotate(20deg); }
+  0%   { transform: rotate(-25deg); }
+  50%  { transform: rotate(25deg); }
+  100% { transform: rotate(-25deg); }
+}
+
+@keyframes bodyBob {
+  0%   { transform: translateY(0px); }
+  50%  { transform: translateY(-3px); }
+  100% { transform: translateY(0px); }
 }
