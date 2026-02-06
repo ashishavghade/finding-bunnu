@@ -5,6 +5,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const male = document.getElementById("male-penguin");
   const female = document.getElementById("female-penguin");
+
+  const maleWrap = male.querySelector(".penguin-wrapper");
+  const femaleWrap = female.querySelector(".penguin-wrapper");
+
   const maleImg = male.querySelector(".penguin-inner");
 
   const stage = document.getElementById("content");
@@ -41,10 +45,18 @@ document.addEventListener("DOMContentLoaded", () => {
   let fireworkTick = 0;
   let sparkleTick = 0;
 
+  /* =========================
+     MOUSE MOVE
+  ========================= */
+
   document.addEventListener("mousemove", e => {
     cx = e.clientX;
     cy = e.clientY;
   });
+
+  /* =========================
+     START CHASE
+  ========================= */
 
   enterBtn.addEventListener("click", () => {
     male.style.left = mx + "px";
@@ -52,6 +64,10 @@ document.addEventListener("DOMContentLoaded", () => {
     male.classList.add("show");
     state = "chase";
   });
+
+  /* =========================
+     START CINEMATIC
+  ========================= */
 
   yesBtn.addEventListener("click", () => {
 
@@ -69,6 +85,10 @@ document.addEventListener("DOMContentLoaded", () => {
     female.classList.add("show");
   });
 
+  /* =========================
+     WALK FRAME UPDATE
+  ========================= */
+
   function updateWalk() {
     tick++;
     if (tick > 6) {
@@ -78,8 +98,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  /* =========================
+     CELEBRATION PARTICLES
+  ========================= */
+
   function spawnBalloon(x, y) {
-    if (!celebrationLayer) return;
     const b = document.createElement("div");
     b.className = "balloon";
     b.innerHTML = "💗";
@@ -110,25 +133,13 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => s.remove(), 1000);
   }
 
-  function addHeartEyes(penguin) {
-    const left = document.createElement("div");
-    const right = document.createElement("div");
-
-    left.className = "heart-eye left";
-    right.className = "heart-eye right";
-
-    left.innerHTML = "❤️";
-    right.innerHTML = "❤️";
-
-    penguin.appendChild(left);
-    penguin.appendChild(right);
-  }
-
-  function removeHeartEyes(penguin) {
-    penguin.querySelectorAll(".heart-eye").forEach(e => e.remove());
-  }
+  /* =========================
+     MAIN ANIMATION LOOP
+  ========================= */
 
   function animate() {
+
+    /* ========= CHASE ========= */
 
     if (state === "chase") {
 
@@ -142,12 +153,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
         male.style.left = mx + "px";
         male.style.top = my + "px";
-        male.style.transform =
-          `translate(-50%, -50%) scaleX(${dx < 0 ? -1 : 1})`;
+
+        maleWrap.style.transform = `scaleX(${dx < 0 ? -1 : 1})`;
 
         updateWalk();
       }
     }
+
+    /* ========= APPROACH CENTER ========= */
 
     else if (state === "approach") {
 
@@ -160,6 +173,7 @@ document.addEventListener("DOMContentLoaded", () => {
       let dxm = maleTarget - mx;
       if (Math.abs(dxm) > 2) {
         mx += Math.sign(dxm) * speed;
+        updateWalk();
       } else {
         maleArrived = true;
       }
@@ -177,16 +191,16 @@ document.addEventListener("DOMContentLoaded", () => {
       male.style.top = centerY + "px";
       female.style.top = centerY + "px";
 
-      male.style.transform = "translate(-50%, -50%) scaleX(1)";
-      female.style.transform = "translate(-50%, -50%) scaleX(-1)";
-
-      updateWalk();
+      maleWrap.style.transform = "scaleX(1)";
+      femaleWrap.style.transform = "scaleX(-1)";
 
       if (maleArrived && femaleArrived) {
         state = "pause";
         timer = 0;
       }
     }
+
+    /* ========= PAUSE ========= */
 
     else if (state === "pause") {
 
@@ -195,10 +209,12 @@ document.addEventListener("DOMContentLoaded", () => {
         state = "lean";
         timer = 0;
         female.classList.add("blushing");
-        addHeartEyes(male);
-        addHeartEyes(female);
+        male.classList.add("show-hearts");
+        female.classList.add("show-hearts");
       }
     }
+
+    /* ========= LEAN ========= */
 
     else if (state === "lean") {
 
@@ -214,6 +230,8 @@ document.addEventListener("DOMContentLoaded", () => {
         timer = 0;
       }
     }
+
+    /* ========= KISS ========= */
 
     else if (state === "kiss") {
 
@@ -243,10 +261,12 @@ document.addEventListener("DOMContentLoaded", () => {
       if (timer > 360) {
         state = "walkaway";
         timer = 0;
-        removeHeartEyes(male);
-        removeHeartEyes(female);
+        male.classList.remove("show-hearts");
+        female.classList.remove("show-hearts");
       }
     }
+
+    /* ========= WALKAWAY ========= */
 
     else if (state === "walkaway") {
 
@@ -264,16 +284,16 @@ document.addEventListener("DOMContentLoaded", () => {
       female.style.left = fx + "px";
       female.style.top = fy + "px";
 
-      male.style.transform = "translate(-50%, -50%) scaleX(1)";
-      female.style.transform = "translate(-50%, -50%) scaleX(1)";
+      maleWrap.style.transform = "scaleX(1)";
+      femaleWrap.style.transform = "scaleX(1)";
+
+      updateWalk();
 
       if (timer % 25 === 0) {
         spawnBalloon(mx, my);
       }
 
       timer++;
-
-      updateWalk();
     }
 
     requestAnimationFrame(animate);
