@@ -17,6 +17,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const stage = document.getElementById("content");
   const celebrationLayer = document.getElementById("celebration-layer");
 
+  const noBtn = document.getElementById("no-btn");
+
   let state = "idle";
   let timer = 0;
 
@@ -69,6 +71,44 @@ document.addEventListener("DOMContentLoaded", () => {
     male.classList.add("show");
     state = "chase";
   });
+
+   /* =========================
+     No-btn chase
+  ========================= */
+  document.addEventListener("mousemove", (e) => {
+
+  if (!noBtn) return;
+
+  const rect = noBtn.getBoundingClientRect();
+
+  const btnX = rect.left + rect.width / 2;
+  const btnY = rect.top + rect.height / 2;
+
+  const dx = e.clientX - btnX;
+  const dy = e.clientY - btnY;
+
+  const distance = Math.hypot(dx, dy);
+
+  if (distance < 120) {
+
+    const moveX = (Math.random() - 0.5) * 300;
+    const moveY = (Math.random() - 0.5) * 200;
+
+    const newLeft = Math.min(
+      window.innerWidth - rect.width,
+      Math.max(0, rect.left + moveX)
+    );
+
+    const newTop = Math.min(
+      window.innerHeight - rect.height,
+      Math.max(0, rect.top + moveY)
+    );
+
+    noBtn.style.position = "fixed";
+    noBtn.style.left = newLeft + "px";
+    noBtn.style.top = newTop + "px";
+  }
+});
 
   /* =========================
      START CINEMATIC
