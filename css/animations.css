@@ -292,10 +292,8 @@
   background: rgba(20, 0, 40, 0.65);
 }
 #no-btn {
-  transition: transform 0.2s ease;
+  position: fixed;
+  transition: left 0.25s ease, top 0.25s ease;
 }
 
-#no-btn:hover {
-  transform: scale(1.1);
-}
 
