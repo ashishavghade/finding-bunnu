@@ -22,7 +22,10 @@ document.addEventListener("DOMContentLoaded", () => {
   let state = "idle";
   let timer = 0;
 
-  const speed = 1.4;
+  let centerX = window.innerWidth / 2;
+  let centerY = window.innerHeight / 2;
+
+  const speed = 1.3;
 
   const frames = [
     "assets/images/penguin_walk01.png",
@@ -49,22 +52,18 @@ document.addEventListener("DOMContentLoaded", () => {
   yesBtn.addEventListener("click", () => {
 
     document.body.style.pointerEvents = "none";
-
     overlay.classList.add("overlay-dim");
 
     state = "approach";
     timer = 0;
 
+    // spawn female opposite side
     const spawnLeft = mx < window.innerWidth / 2;
-    const fx = spawnLeft ? window.innerWidth - 200 : 200;
-    const fy = window.innerHeight / 2;
+    const fx = spawnLeft ? window.innerWidth - 150 : 150;
 
     female.style.left = fx + "px";
-    female.style.top = fy + "px";
+    female.style.top = centerY + "px";
     female.classList.add("show");
-
-    female.dataset.x = fx;
-    female.dataset.y = fy;
   });
 
   function updateWalk() {
@@ -76,8 +75,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  function spawnFireworks(x, y) {
-    for (let i = 0; i < 30; i++) {
+  function spawnFireworkBurst(x, y) {
+    for (let i = 0; i < 25; i++) {
       const f = document.createElement("div");
       f.className = "firework";
       f.style.left = x + "px";
@@ -88,16 +87,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  function spawnBalloons(x, y) {
-    for (let i = 0; i < 20; i++) {
-      const b = document.createElement("div");
-      b.className = "balloon";
-      b.innerHTML = "💗";
-      b.style.left = (x + Math.random()*300 - 150) + "px";
-      b.style.top = y + "px";
-      celebrationLayer.appendChild(b);
-      setTimeout(() => b.remove(), 6000);
-    }
+  function spawnBalloon(x, y) {
+    const b = document.createElement("div");
+    b.className = "balloon";
+    b.innerHTML = "💗";
+    b.style.left = (x + Math.random()*200 - 100) + "px";
+    b.style.top = y + "px";
+    celebrationLayer.appendChild(b);
+    setTimeout(() => b.remove(), 6000);
   }
 
   function startSnow() {
@@ -125,7 +122,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         male.style.left = mx + "px";
         male.style.top = my + "px";
-
         male.style.transform =
           `translate(-50%, -50%) scaleX(${dx < 0 ? -1 : 1})`;
 
@@ -135,26 +131,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
     else if (state === "approach") {
 
-      const fx = parseFloat(female.dataset.x);
-      const fy = parseFloat(female.dataset.y);
+      // true midpoint approach
+      const maleTargetX = centerX - 40;
+      const femaleTargetX = centerX + 40;
 
-      const dx = fx - mx;
-      const dy = fy - my;
-      const dist = Math.hypot(dx, dy);
+      const dx = maleTargetX - mx;
+      const dist = Math.abs(dx);
 
-      if (dist > 60) {
-
-        mx += (dx/dist) * 1.2;
-        my += (dy/dist) * 1.2;
+      if (dist > 2) {
+        mx += dx * 0.05;
 
         male.style.left = mx + "px";
-        male.style.top = my + "px";
+        male.style.top = centerY + "px";
 
-        male.style.transform =
-          `translate(-50%, -50%) scaleX(${dx < 0 ? -1 : 1})`;
+        female.style.left = female.offsetLeft + (femaleTargetX - female.offsetLeft) * 0.05 + "px";
 
-        female.style.transform =
-          `translate(-50%, -50%) scaleX(${dx < 0 ? 1 : -1})`;
+        male.style.transform = `translate(-50%, -50%) scaleX(1)`;
+        female.style.transform = `translate(-50%, -50%) scaleX(-1)`;
 
         updateWalk();
 
@@ -167,7 +160,7 @@ document.addEventListener("DOMContentLoaded", () => {
     else if (state === "pause") {
 
       timer++;
-      if (timer > 150) { // ~2.5s
+      if (timer > 150) {
         state = "lean";
         timer = 0;
         male.classList.add("show-eyes");
@@ -178,24 +171,34 @@ document.addEventListener("DOMContentLoaded", () => {
 
     else if (state === "lean") {
 
-      male.classList.add("lean-in");
-      female.classList.add("lean-in");
+      male.style.left = (centerX - 30) + "px";
+      female.style.left = (centerX + 30) + "px";
 
       timer++;
       if (timer > 120) {
         state = "kiss";
         timer = 0;
-        spawnFireworks(mx, my);
-        spawnBalloons(mx, my);
       }
     }
 
     else if (state === "kiss") {
 
-      stage.style.transform = "scale(1.12)";
+      // gradual zoom in
+      const scale = 1 + (timer / 360) * 0.12;
+      stage.style.transform = `scale(${scale})`;
+
+      // continuous fireworks
+      if (timer % 40 === 0) {
+        spawnFireworkBurst(centerX, centerY);
+      }
+
+      // continuous balloons
+      if (timer % 20 === 0) {
+        spawnBalloon(centerX, centerY);
+      }
 
       timer++;
-      if (timer > 360) { // 6 sec
+      if (timer > 360) {
         state = "hold";
         timer = 0;
       }
@@ -204,20 +207,21 @@ document.addEventListener("DOMContentLoaded", () => {
     else if (state === "hold") {
 
       timer++;
-      if (timer > 180) {
+      if (timer > 120) {
         state = "walkaway";
+        timer = 0;
         startSnow();
       }
     }
 
     else if (state === "walkaway") {
 
+      stage.style.transform = "scale(1)"; // zoom out
+
       mx += 1.5;
-      let fx = parseFloat(female.dataset.x) + 1.5;
-      female.dataset.x = fx;
 
       male.style.left = mx + "px";
-      female.style.left = fx + "px";
+      female.style.left = (mx + 70) + "px";
 
       male.style.transform = `translate(-50%, -50%) scaleX(1)`;
       female.style.transform = `translate(-50%, -50%) scaleX(1)`;
