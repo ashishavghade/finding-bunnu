@@ -7,7 +7,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const malePenguinImg = document.querySelector("#male-penguin .penguin-inner");
 
   const femalePenguin = document.getElementById("female-penguin");
-  const femalePenguinImg = document.querySelector("#female-penguin .penguin-inner");
 
   const cursor = document.getElementById("heart-cursor");
 
@@ -19,6 +18,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let chasing = false;
   let cinematicMode = false;
+
+  let lovePhase = null;
+  let loveTargetX = 0;
+  let loveTargetY = 0;
 
   const moveSpeed = 1.2;
 
@@ -38,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
     cursorY = e.clientY;
   });
 
-  // Enter button
+  // Step Inside
   enterBtn.addEventListener("click", () => {
     malePenguin.style.left = penguinX + "px";
     malePenguin.style.top = penguinY + "px";
@@ -48,65 +51,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // YES cinematic
   yesBtn.addEventListener("click", () => {
-
-    cinematicMode = true;
     chasing = false;
+    cinematicMode = true;
 
-    // Place female at cursor position
     femalePenguin.style.left = cursorX + "px";
     femalePenguin.style.top = cursorY + "px";
     femalePenguin.classList.add("show");
 
-    let loveInterval = setInterval(() => {
+    loveTargetX = cursorX;
+    loveTargetY = cursorY;
 
-      const dx = cursorX - penguinX;
-      const dy = cursorY - penguinY;
-      const dist = Math.hypot(dx, dy);
-
-      if (dist > 10) {
-
-        const dirX = dx / dist;
-        const dirY = dy / dist;
-
-        penguinX += dirX * 1.5;
-        penguinY += dirY * 1.5;
-
-        malePenguin.style.left = penguinX + "px";
-        malePenguin.style.top = penguinY + "px";
-
-      } else {
-
-        clearInterval(loveInterval);
-
-        // Kiss bounce
-        malePenguin.classList.add("kiss");
-        femalePenguin.classList.add("kiss");
-
-        setTimeout(() => {
-
-          let walkOff = setInterval(() => {
-
-            penguinX += 2;
-            malePenguin.style.left = penguinX + "px";
-
-            cursorX += 2;
-            femalePenguin.style.left = cursorX + "px";
-
-            if (penguinX > window.innerWidth + 150) {
-              clearInterval(walkOff);
-            }
-
-          }, 16);
-
-        }, 800);
-      }
-
-    }, 16);
-
+    lovePhase = "approach";
   });
 
   function animatePenguin() {
 
+    // ---------------------------
+    // NORMAL CHASE MODE
+    // ---------------------------
     if (chasing && !cinematicMode) {
 
       const dx = cursorX - penguinX;
@@ -154,10 +116,58 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
+    // ---------------------------
+    // CINEMATIC MODE
+    // ---------------------------
+    if (cinematicMode) {
+
+      const dx = loveTargetX - penguinX;
+      const dy = loveTargetY - penguinY;
+      const distance = Math.hypot(dx, dy);
+
+      if (lovePhase === "approach") {
+
+        if (distance > 10) {
+
+          const dirX = dx / distance;
+          const dirY = dy / distance;
+
+          penguinX += dirX * 1.5;
+          penguinY += dirY * 1.5;
+
+          malePenguin.style.left = penguinX + "px";
+          malePenguin.style.top = penguinY + "px";
+
+        } else {
+
+          lovePhase = "kiss";
+          malePenguin.classList.add("kiss");
+          femalePenguin.classList.add("kiss");
+
+          setTimeout(() => {
+            lovePhase = "walkaway";
+          }, 800);
+        }
+      }
+
+      else if (lovePhase === "walkaway") {
+
+        penguinX += 2;
+        loveTargetX += 2;
+
+        malePenguin.style.left = penguinX + "px";
+        femalePenguin.style.left = loveTargetX + "px";
+
+        if (penguinX > window.innerWidth + 150) {
+          cinematicMode = false;
+        }
+      }
+    }
+
     requestAnimationFrame(animatePenguin);
   }
 
-  // Start loop once
+  // Start animation loop once
   animatePenguin();
 
 });
