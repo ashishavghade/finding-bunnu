@@ -38,7 +38,7 @@ const penguinImg = document.querySelector(".penguin-inner");
     penguin.classList.add("show");
 
     chasing = true;
-    animatePenguin();
+ 
   });
 
   function animatePenguin() {
@@ -101,5 +101,5 @@ const penguinImg = document.querySelector(".penguin-inner");
 
     requestAnimationFrame(animatePenguin);
   }
-
+   animatePenguin();
 });
