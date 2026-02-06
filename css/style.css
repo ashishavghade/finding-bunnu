@@ -90,13 +90,53 @@ button:hover {
   margin-bottom: 10px;
 }
 
-/* 🐧 Penguin Layer */
-#penguin-container {
-  position: fixed;
+#male-penguin {
+  position: absolute;
+  width: 70px;
+  height: 80px;
+  transform: translate(-50%, -50%);
+}
+
+/* Body */
+.body {
+  width: 70px;
+  height: 70px;
+  background: black;
+  border-radius: 50%;
+  position: absolute;
   top: 0;
   left: 0;
-  pointer-events: none;
-  z-index: 8;
+}
+
+/* Belly */
+.body::after {
+  content: "";
+  width: 40px;
+  height: 45px;
+  background: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 15px;
+  left: 15px;
+}
+
+/* Legs */
+.leg {
+  width: 10px;
+  height: 22px;
+  background: orange;
+  position: absolute;
+  bottom: 0;
+  border-radius: 3px;
+  transform-origin: top center;   /* THIS IS IMPORTANT */
+}
+
+.left-leg {
+  left: 18px;
+}
+
+.right-leg {
+  right: 18px;
 }
 
 
