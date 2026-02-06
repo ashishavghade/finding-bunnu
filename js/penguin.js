@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const femaleWrap = female.querySelector(".penguin-wrapper");
 
   const maleImg = male.querySelector(".penguin-inner");
+  const femaleImg = female.querySelector(".penguin-inner");
 
   const overlay = document.getElementById("cinematic-overlay");
 
@@ -98,6 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (tick > 6) {
       frame = (frame + 1) % frames.length;
       maleImg.src = frames[frame];
+      femaleImg.src = frames[frame];
       tick = 0;
     }
   }
