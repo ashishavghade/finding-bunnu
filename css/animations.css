@@ -30,3 +30,54 @@
 #male-penguin.show {
   opacity: 1;
 }
+
+#male-penguin {
+  position: absolute;
+  width: 60px;
+  height: 70px;
+  transform: translate(-50%, -50%);
+}
+
+.body {
+  width: 60px;
+  height: 60px;
+  background: black;
+  border-radius: 50%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.leg {
+  width: 12px;
+  height: 20px;
+  background: orange;
+  position: absolute;
+  bottom: 0;
+  border-radius: 4px;
+}
+
+.left-leg {
+  left: 12px;
+}
+
+.right-leg {
+  right: 12px;
+}
+.walk .left-leg {
+  animation: walkLeft 0.3s infinite alternate;
+}
+
+.walk .right-leg {
+  animation: walkRight 0.3s infinite alternate;
+}
+
+@keyframes walkLeft {
+  from { transform: rotate(20deg); }
+  to   { transform: rotate(-20deg); }
+}
+
+@keyframes walkRight {
+  from { transform: rotate(-20deg); }
+  to   { transform: rotate(20deg); }
+}
