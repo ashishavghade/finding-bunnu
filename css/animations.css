@@ -64,3 +64,7 @@
   0%, 95%, 100% { filter: none; }
   97% { transform: translate(-50%, -50%) scaleY(0.1); }
 }
+.love-mode .heart {
+  filter: drop-shadow(0 0 15px hotpink);
+  animation: pulse 0.6s infinite ease-in-out;
+}
