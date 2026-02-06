@@ -133,7 +133,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     setTimeout(() => heart.remove(), 8000);
 
-  }, 400); // controls density (increase to reduce density)
+  }, 200); // controls density (increase to reduce density)
 }
 
 
