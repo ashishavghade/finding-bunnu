@@ -85,7 +85,7 @@
 
 .face {
   position: absolute;
-  top: 22px;          /* adjust if needed */
+  top: 10px;          /* adjust if needed */
   left: 0;
   width: 100%;
   height: 20px;
