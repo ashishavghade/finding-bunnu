@@ -3,191 +3,186 @@ document.addEventListener("DOMContentLoaded", () => {
   const enterBtn = document.getElementById("enter-btn");
   const yesBtn = document.getElementById("yes-btn");
 
-  const malePenguin = document.getElementById("male-penguin");
-  const malePenguinImg = document.querySelector("#male-penguin .penguin-inner");
+  const male = document.getElementById("male-penguin");
+  const maleImg = document.querySelector("#male-penguin .penguin-inner");
 
-  const femalePenguin = document.getElementById("female-penguin");
+  const female = document.getElementById("female-penguin");
 
-  const cursor = document.getElementById("heart-cursor");
   const celebrationLayer = document.getElementById("celebration-layer");
 
-  let penguinX = window.innerWidth / 2;
-  let penguinY = window.innerHeight / 2;
+  let mx = window.innerWidth / 2;
+  let my = window.innerHeight / 2;
 
-  let cursorX = window.innerWidth / 2;
-  let cursorY = window.innerHeight / 2;
+  let cx = window.innerWidth / 2;
+  let cy = window.innerHeight / 2;
 
   let chasing = false;
-  let cinematicMode = false;
+  let mode = "normal"; // normal | approach | kiss | walkaway
 
-  let lovePhase = null;
-  let loveTargetX = 0;
-  let loveTargetY = 0;
+  const speed = 1.2;
 
-  const moveSpeed = 1.2;
-
-  const walkFrames = [
+  const frames = [
     "assets/images/penguin_walk01.png",
     "assets/images/penguin_walk02.png",
     "assets/images/penguin_walk03.png",
     "assets/images/penguin_walk04.png"
   ];
 
-  let currentFrame = 0;
-  let frameTimer = 0;
+  let frame = 0;
+  let frameTick = 0;
 
-  document.addEventListener("mousemove", (e) => {
-    cursorX = e.clientX;
-    cursorY = e.clientY;
+  document.addEventListener("mousemove", e => {
+    cx = e.clientX;
+    cy = e.clientY;
   });
 
   enterBtn.addEventListener("click", () => {
-    malePenguin.style.left = penguinX + "px";
-    malePenguin.style.top = penguinY + "px";
-    malePenguin.classList.add("show");
+    male.style.left = mx + "px";
+    male.style.top = my + "px";
+    male.classList.add("show");
     chasing = true;
   });
 
   yesBtn.addEventListener("click", () => {
 
     chasing = false;
-    cinematicMode = true;
+    mode = "approach";
 
-    const isMaleLeft = penguinX < window.innerWidth / 2;
+    // Spawn female opposite MALE position
+    const spawnLeft = mx < window.innerWidth / 2;
 
-    loveTargetX = isMaleLeft ? window.innerWidth - 200 : 200;
-    loveTargetY = window.innerHeight / 2;
+    const fx = spawnLeft ? window.innerWidth - 200 : 200;
+    const fy = window.innerHeight / 2;
 
-    femalePenguin.style.left = loveTargetX + "px";
-    femalePenguin.style.top = loveTargetY + "px";
-    femalePenguin.classList.add("show");
+    female.style.left = fx + "px";
+    female.style.top = fy + "px";
+    female.classList.add("show");
 
-    // female faces male
-    femalePenguin.style.transform =
-      `translate(-50%, -50%) scaleX(${isMaleLeft ? -1 : 1})`;
-
-    lovePhase = "approach";
+    female.dataset.targetX = fx;
+    female.dataset.targetY = fy;
   });
 
-  function updateWalkFrame() {
-    frameTimer++;
-    if (frameTimer > 8) {
-      currentFrame = (currentFrame + 1) % walkFrames.length;
-      malePenguinImg.src = walkFrames[currentFrame];
-      frameTimer = 0;
+  function updateFrame() {
+    frameTick++;
+    if (frameTick > 8) {
+      frame = (frame + 1) % frames.length;
+      maleImg.src = frames[frame];
+      frameTick = 0;
     }
   }
 
+  function celebrate(x, y) {
+    if (!celebrationLayer) return;
 
-  function animatePenguin() {
+    for (let i = 0; i < 20; i++) {
+      const h = document.createElement("div");
+      h.className = "heart-particle";
+      h.innerHTML = "💗";
+      h.style.left = (x + Math.random() * 100 - 50) + "px";
+      h.style.top = (y + Math.random() * 60 - 30) + "px";
+      celebrationLayer.appendChild(h);
+      setTimeout(() => h.remove(), 1500);
+    }
+  }
 
-    // NORMAL CHASE
-    if (chasing && !cinematicMode) {
+  function setHeartEyes(penguin, enable) {
+    const img = penguin.querySelector(".penguin-inner");
+    if (!img) return;
 
-      const dx = cursorX - penguinX;
-      const dy = cursorY - penguinY;
-      const distance = Math.hypot(dx, dy);
+    if (enable) {
+      img.style.filter = "drop-shadow(0 0 6px hotpink)";
+    } else {
+      img.style.filter = "none";
+    }
+  }
 
-      const direction = dx < 0 ? -1 : 1;
+  function animate() {
 
-      if (distance > 5) {
+    if (chasing && mode === "normal") {
 
-        const dirX = dx / distance;
-        const dirY = dy / distance;
+      const dx = cx - mx;
+      const dy = cy - my;
+      const dist = Math.hypot(dx, dy);
 
-        penguinX += dirX * moveSpeed;
-        penguinY += dirY * moveSpeed;
+      const dir = dx < 0 ? -1 : 1;
 
-        malePenguin.style.left = penguinX + "px";
-        malePenguin.style.top = penguinY + "px";
+      if (dist > 5) {
+        mx += (dx / dist) * speed;
+        my += (dy / dist) * speed;
 
-        malePenguin.style.transform =
-          `translate(-50%, -50%) scaleX(${direction})`;
+        male.style.left = mx + "px";
+        male.style.top = my + "px";
+        male.style.transform = `translate(-50%, -50%) scaleX(${dir})`;
 
-        updateWalkFrame();
+        updateFrame();
+      }
+    }
 
+    if (mode === "approach") {
+
+      const fx = parseFloat(female.dataset.targetX);
+      const fy = parseFloat(female.dataset.targetY);
+
+      const dx = fx - mx;
+      const dy = fy - my;
+      const dist = Math.hypot(dx, dy);
+
+      if (dist > 40) {
+        mx += (dx / dist) * 1.5;
+        my += (dy / dist) * 1.5;
+
+        male.style.left = mx + "px";
+        male.style.top = my + "px";
+
+        // Face female
+        male.style.transform =
+          `translate(-50%, -50%) scaleX(${dx < 0 ? -1 : 1})`;
+
+        female.style.transform =
+          `translate(-50%, -50%) scaleX(${dx < 0 ? 1 : -1})`;
+
+        updateFrame();
       } else {
+        mode = "kiss";
 
-        malePenguinImg.src = walkFrames[1];
+        male.classList.add("kiss");
+        female.classList.add("kiss");
+        female.classList.add("blushing");
 
-        const bounce = Math.sin(Date.now() * 0.01) * 3;
+        setHeartEyes(male, true);
+        setHeartEyes(female, true);
 
-        malePenguin.style.transform =
-          `translate(-50%, -50%) translateY(${bounce}px) scaleX(${direction})`;
+        celebrate(mx, my);
+
+        setTimeout(() => {
+          mode = "walkaway";
+        }, 900);
       }
     }
 
-    // CINEMATIC
-    if (cinematicMode) {
+    if (mode === "walkaway") {
 
-      const dx = loveTargetX - penguinX;
-      const dy = loveTargetY - penguinY;
-      const distance = Math.hypot(dx, dy);
+      mx += 2;
+      const fx = parseFloat(female.dataset.targetX) + 2;
+      female.dataset.targetX = fx;
 
-      if (lovePhase === "approach") {
+      male.style.left = mx + "px";
+      female.style.left = fx + "px";
 
-        if (distance > 40) {
+      // BOTH FACE RIGHT while walking away
+      male.style.transform = `translate(-50%, -50%) scaleX(1)`;
+      female.style.transform = `translate(-50%, -50%) scaleX(1)`;
 
-          const dirX = dx / distance;
-          const dirY = dy / distance;
+      updateFrame();
 
-          penguinX += dirX * 1.5;
-          penguinY += dirY * 1.5;
-
-          malePenguin.style.left = penguinX + "px";
-          malePenguin.style.top = penguinY + "px";
-
-          updateWalkFrame();
-
-        } else {
-
-          lovePhase = "kiss";
-
-          const spacing = 35;
-
-          malePenguin.style.left =
-            (loveTargetX < penguinX ? loveTargetX + spacing : loveTargetX - spacing) + "px";
-
-          femalePenguin.style.left =
-            (loveTargetX < penguinX ? loveTargetX - spacing : loveTargetX + spacing) + "px";
-
-          malePenguin.classList.add("kiss");
-          femalePenguin.classList.add("kiss");
-          femalePenguin.classList.add("blushing");
-
-         triggerCelebration(loveTargetX, loveTargetY);
-
-          setTimeout(() => {
-            lovePhase = "walkaway";
-          }, 900);
-        }
-      }
-
-      else if (lovePhase === "walkaway") {
-
-        penguinX += 2;
-        loveTargetX += 2;
-
-        malePenguin.style.left = penguinX + "px";
-        femalePenguin.style.left = loveTargetX + "px";
-
-        // both face right while leaving
-        malePenguin.style.transform =
-          `translate(-50%, -50%) scaleX(1)`;
-        femalePenguin.style.transform =
-          `translate(-50%, -50%) scaleX(1)`;
-
-        updateWalkFrame();
-
-        if (penguinX > window.innerWidth + 150) {
-          cinematicMode = false;
-        }
+      if (mx > window.innerWidth + 150) {
+        mode = "normal";
       }
     }
 
-    requestAnimationFrame(animatePenguin);
+    requestAnimationFrame(animate);
   }
 
-  animatePenguin();
+  animate();
 
 });
