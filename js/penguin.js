@@ -33,19 +33,29 @@ document.addEventListener("DOMContentLoaded", () => {
   function animatePenguin() {
 
     if (chasing) {
+penguinX += (cursorX - penguinX) * speed;
+penguinY += (cursorY - penguinY) * speed;
 
-      penguinX += (cursorX - penguinX) * speed;
-      penguinY += (cursorY - penguinY) * speed;
+penguin.style.left = penguinX + "px";
+penguin.style.top = penguinY + "px";
 
-      penguin.style.left = penguinX + "px";
-      penguin.style.top = penguinY + "px";
+// Calculate movement intensity
+const distance = Math.hypot(cursorX - penguinX, cursorY - penguinY);
 
-      // Flip direction
-      if (cursorX < penguinX) {
-        penguin.style.transform = "translate(-50%, -50%) scaleX(-1)";
-      } else {
-        penguin.style.transform = "translate(-50%, -50%) scaleX(1)";
-      }
+// Waddle bounce
+let bounce = 0;
+if (distance > 5) {
+  bounce = Math.sin(Date.now() * 0.01) * 6;
+}
+
+// Flip direction + apply bounce
+if (cursorX < penguinX) {
+  penguin.style.transform =
+    `translate(-50%, -50%) scaleX(-1) translateY(${bounce}px)`;
+} else {
+  penguin.style.transform =
+    `translate(-50%, -50%) scaleX(1) translateY(${bounce}px)`;
+}
     }
 
     requestAnimationFrame(animatePenguin);
