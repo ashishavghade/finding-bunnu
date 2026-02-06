@@ -107,8 +107,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     else if (state === "approach") {
 
-      const maleTarget = centerX - 40;
-      const femaleTarget = centerX + 40;
+      const maleTarget = centerX - 28;
+      const femaleTarget = centerX + 28;
 
       mx += (maleTarget - mx) * 0.05;
       fx += (femaleTarget - fx) * 0.05;
@@ -142,8 +142,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     else if (state === "lean") {
 
-      male.style.left = (centerX - 25) + "px";
-      female.style.left = (centerX + 25) + "px";
+      mx += (centerX - 18 - mx) * 0.08;
+      fx += (centerX + 18 - fx) * 0.08;
+
+      male.style.left = mx + "px";
+      female.style.left = fx + "px";
 
       timer++;
       if (timer > 120) {
@@ -157,7 +160,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const zoom = 1 + (timer / 360) * 0.1;
       stage.style.transform = `scale(${zoom})`;
 
-      if (timer % 20 === 0) {
+      if (timer % 12 === 0) {
         spawnHeart(centerX, centerY);
       }
 
@@ -185,7 +188,7 @@ document.addEventListener("DOMContentLoaded", () => {
       fx += 1.5;
 
       male.style.left = mx + "px";
-      female.style.left = fx + "px";
+      female.style.left = (fx + 55) + "px";
 
       male.style.transform = "translate(-50%, -50%) scaleX(1)";
       female.style.transform = "translate(-50%, -50%) scaleX(1)";
