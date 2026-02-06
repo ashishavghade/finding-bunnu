@@ -19,12 +19,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const noBtn = document.getElementById("no-btn");
 
-  if (noBtn) {
-  const rect = noBtn.getBoundingClientRect();
-  noBtn.style.position = "fixed";
-  noBtn.style.left = rect.left + "px";
-  noBtn.style.top = rect.top + "px";
-}
 
   let state = "idle";
   let timer = 0;
@@ -82,31 +76,36 @@ document.addEventListener("DOMContentLoaded", () => {
    /* =========================
      No-btn chase
   ========================= */
-  document.addEventListener("mousemove", (e) => {
+ let noLocked = false;
+
+document.addEventListener("mousemove", (e) => {
 
   if (!noBtn) return;
 
+  // Lock position only when first needed
+  if (!noLocked) {
+    const rect = noBtn.getBoundingClientRect();
+    noBtn.style.position = "fixed";
+    noBtn.style.left = rect.left + "px";
+    noBtn.style.top = rect.top + "px";
+    noLocked = true;
+  }
+
   const rect = noBtn.getBoundingClientRect();
 
-  const btnCenterX = rect.left + rect.width / 2;
-  const btnCenterY = rect.top + rect.height / 2;
-
-  const dx = btnCenterX - e.clientX;
-  const dy = btnCenterY - e.clientY;
+  const dx = rect.left + rect.width / 2 - e.clientX;
+  const dy = rect.top + rect.height / 2 - e.clientY;
 
   const distance = Math.hypot(dx, dy);
 
-  // Only react when VERY close
   if (distance < 70) {
 
-    const moveDistance = 180; // how far it runs
-
     const angle = Math.atan2(dy, dx);
+    const moveDistance = 180;
 
     let newLeft = rect.left + Math.cos(angle) * moveDistance;
     let newTop  = rect.top  + Math.sin(angle) * moveDistance;
 
-    // Keep inside screen
     newLeft = Math.max(20, Math.min(window.innerWidth - rect.width - 20, newLeft));
     newTop  = Math.max(20, Math.min(window.innerHeight - rect.height - 20, newTop));
 
