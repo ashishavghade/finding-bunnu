@@ -179,4 +179,33 @@ button:hover {
 .video-card:hover video {
   transform: scale(1.05);
 }
+.memory-special-wrapper {
+  margin-top: 80px;
+  display: flex;
+  justify-content: center;
+}
+
+.special-card {
+  transform: scale(1.08);
+  box-shadow: 0 0 40px rgba(255, 200, 255, 0.6);
+  position: relative;
+}
+
+.special-card::before {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 30px;
+  background: linear-gradient(45deg, #ff9de2, #ffd6ff, #ffc0cb);
+  z-index: -1;
+  filter: blur(20px);
+  opacity: 0.6;
+}
+
+.special-line {
+  font-size: 0.9rem;
+  margin-top: 8px;
+  font-style: italic;
+  opacity: 0.8;
+}
 
