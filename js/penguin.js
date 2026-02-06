@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const enterBtn = document.getElementById("enter-btn");
   const penguin = document.getElementById("male-penguin");
+  const cursor = document.getElementById("heart-cursor");
 
   let penguinX = window.innerWidth / 2;
   let penguinY = window.innerHeight / 2;
@@ -9,8 +10,9 @@ document.addEventListener("DOMContentLoaded", () => {
   let cursorX = window.innerWidth / 2;
   let cursorY = window.innerHeight / 2;
 
-  const speed = 0.008;
   let chasing = false;
+
+  const moveSpeed = 1.2;
 
   const walkFrames = [
     "assets/images/penguin_walk01.png",
@@ -22,11 +24,13 @@ document.addEventListener("DOMContentLoaded", () => {
   let currentFrame = 0;
   let frameTimer = 0;
 
+  // Track cursor
   document.addEventListener("mousemove", (e) => {
     cursorX = e.clientX;
     cursorY = e.clientY;
   });
 
+  // Start penguin
   enterBtn.addEventListener("click", () => {
     penguin.style.left = penguinX + "px";
     penguin.style.top = penguinY + "px";
@@ -38,49 +42,63 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function animatePenguin() {
 
-  if (chasing) {
+    if (chasing) {
 
-    // Direction difference
-    const dx = cursorX - penguinX;
-    const dy = cursorY - penguinY;
+      const dx = cursorX - penguinX;
+      const dy = cursorY - penguinY;
+      const distance = Math.hypot(dx, dy);
 
-    const distance = Math.hypot(dx, dy);
-
-    const moveSpeed = 1.2; // walking speed (lower = cuter)
-
-    if (distance > 5) {
-
-      // Normalize direction
-      const dirX = dx / distance;
-      const dirY = dy / distance;
-
-      // Constant movement
-      penguinX += dirX * moveSpeed;
-      penguinY += dirY * moveSpeed;
-
-      penguin.style.left = penguinX + "px";
-      penguin.style.top = penguinY + "px";
-
-      // Flip direction
       const direction = dx < 0 ? -1 : 1;
-      penguin.style.transform =
-        `translate(-50%, -50%) scaleX(${direction})`;
 
-      // Frame animation
-      frameTimer++;
+      if (distance > 5) {
 
-      if (frameTimer > 8) { // controls animation speed
-        currentFrame = (currentFrame + 1) % walkFrames.length;
-        penguin.src = walkFrames[currentFrame];
-        frameTimer = 0;
+        // Walking
+        penguin.classList.remove("idle");
+
+        const dirX = dx / distance;
+        const dirY = dy / distance;
+
+        penguinX += dirX * moveSpeed;
+        penguinY += dirY * moveSpeed;
+
+        penguin.style.left = penguinX + "px";
+        penguin.style.top = penguinY + "px";
+
+        penguin.style.transform =
+          `translate(-50%, -50%) scaleX(${direction})`;
+
+        // Frame switching
+        frameTimer++;
+
+        if (frameTimer > 8) {
+          currentFrame = (currentFrame + 1) % walkFrames.length;
+          penguin.src = walkFrames[currentFrame];
+          frameTimer = 0;
+        }
+
+      } else {
+
+        // Idle state
+        penguin.src = "assets/images/penguin_walk02.png";
+
+        // Cute bounce
+        const bounce = Math.sin(Date.now() * 0.01) * 3;
+
+        penguin.style.transform =
+          `translate(-50%, -50%) translateY(${bounce}px) scaleX(${direction})`;
+
+        penguin.classList.add("idle");
       }
 
-    } else {
-      // Idle frame
-      penguin.src = walkFrames[0];
+      // Heart glow when close
+      if (distance < 80) {
+        cursor.classList.add("love-mode");
+      } else {
+        cursor.classList.remove("love-mode");
+      }
     }
+
+    requestAnimationFrame(animatePenguin);
   }
 
-  requestAnimationFrame(animatePenguin);
-}
 });
