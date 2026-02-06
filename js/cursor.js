@@ -1,25 +1,29 @@
-const cursor = document.getElementById("heart-cursor");
+document.addEventListener("DOMContentLoaded", () => {
 
-let mouseX = 0;
-let mouseY = 0;
+  const cursor = document.getElementById("heart-cursor");
 
-let cursorX = 0;
-let cursorY = 0;
+  let mouseX = 0;
+  let mouseY = 0;
+  let cursorX = 0;
+  let cursorY = 0;
 
-const speed = 0.15; // lower = smoother lag
+  const speed = 0.15;
 
-document.addEventListener("mousemove", (e) => {
-  mouseX = e.clientX;
-  mouseY = e.clientY;
+  document.addEventListener("mousemove", (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+  });
+
+  function animateCursor() {
+    cursorX += (mouseX - cursorX) * speed;
+    cursorY += (mouseY - cursorY) * speed;
+
+    cursor.style.transform =
+      `translate(${cursorX}px, ${cursorY}px) translate(-50%, -50%)`;
+
+    requestAnimationFrame(animateCursor);
+  }
+
+  animateCursor();
+
 });
-
-function animateCursor() {
-  cursorX += (mouseX - cursorX) * speed;
-  cursorY += (mouseY - cursorY) * speed;
-
-  cursor.style.transform = `translate(${cursorX}px, ${cursorY}px)`;
-
-  requestAnimationFrame(animateCursor);
-}
-
-animateCursor();
