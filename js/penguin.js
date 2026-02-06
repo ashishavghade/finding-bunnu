@@ -11,6 +11,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const maleImg = male.querySelector(".penguin-inner");
 
+  const overlay = document.getElementById("cinematic-overlay");
+
   const stage = document.getElementById("content");
   const celebrationLayer = document.getElementById("celebration-layer");
 
@@ -249,6 +251,8 @@ document.addEventListener("DOMContentLoaded", () => {
     else if (state === "kiss") {
 
       startHeartRain();
+
+      overlay.classList.add("active");
 
       const zoom = 1 + (timer / 360) * 0.12;
       stage.style.transform = `scale(${zoom})`;
