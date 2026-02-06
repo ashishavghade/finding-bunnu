@@ -74,3 +74,25 @@
   filter: drop-shadow(0 0 15px hotpink);
   animation: pulse 0.6s infinite ease-in-out;
 }
+
+#female-penguin {
+  position: absolute;
+  width: 80px;
+  transform: translate(-50%, -50%) scaleX(-1);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+#female-penguin.show {
+  opacity: 1;
+}
+
+.kiss {
+  animation: kissBounce 0.4s ease-in-out 3;
+}
+
+@keyframes kissBounce {
+  0% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -50%) scale(1.1); }
+  100% { transform: translate(-50%, -50%) scale(1); }
+}
