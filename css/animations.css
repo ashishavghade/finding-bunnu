@@ -23,9 +23,14 @@
   100% { transform: scale(1); }
 }
 
+.love-mode .heart {
+  filter: drop-shadow(0 0 18px hotpink);
+  animation: pulse 0.6s infinite ease-in-out;
+}
+
 
 /* =========================
-   🐧 PENGUIN STRUCTURE
+   🐧 PENGUIN CONTAINER
 ========================= */
 
 #penguin-container {
@@ -36,9 +41,14 @@
   z-index: 8;
 }
 
+
+/* =========================
+   🐧 MALE PENGUIN
+========================= */
+
 #male-penguin {
   position: absolute;
-  width: 80px; /* adjust if needed */
+  width: 80px;
   transform: translate(-50%, -50%);
   opacity: 0;
   transition: opacity 0.5s ease;
@@ -47,6 +57,82 @@
 #male-penguin.show {
   opacity: 1;
 }
+
+
+/* =========================
+   🐧 FEMALE PENGUIN
+========================= */
+
+#female-penguin {
+  position: absolute;
+  width: 80px;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+#female-penguin.show {
+  opacity: 1;
+}
+
+
+/* =========================
+   🎀 BOW (properly placed)
+========================= */
+
+#female-penguin .bow {
+  position: absolute;
+  top: 8px;          /* on head */
+  right: 14px;
+  width: 14px;
+  height: 10px;
+  background: hotpink;
+  border-radius: 50%;
+}
+
+#female-penguin .bow::before,
+#female-penguin .bow::after {
+  content: "";
+  position: absolute;
+  width: 8px;
+  height: 10px;
+  background: pink;
+  border-radius: 50%;
+}
+
+#female-penguin .bow::before {
+  left: -6px;
+}
+
+#female-penguin .bow::after {
+  right: -6px;
+}
+
+
+/* =========================
+   🌸 BLUSH (cheeks)
+========================= */
+
+#female-penguin .blush {
+  position: absolute;
+  top: 40px;         /* cheek level */
+  left: 20px;
+  width: 35px;
+  height: 14px;
+  background: radial-gradient(circle, rgba(255,100,150,0.8) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+#female-penguin.blushing .blush {
+  opacity: 1;
+}
+
+
+/* =========================
+   🫁 BREATHING (inner only)
+========================= */
+
 .penguin-inner.idle {
   animation: breathe 2.5s ease-in-out infinite;
 }
@@ -57,98 +143,17 @@
   100% { transform: scale(1); }
 }
 
-@keyframes breathe {
-  0%   { transform: translate(-50%, -50%) scale(1); }
-  50%  { transform: translate(-50%, -50%) scale(1.03); }
-  100% { transform: translate(-50%, -50%) scale(1); }
-}
-.blink {
-  animation: blink 4s infinite;
-}
 
-@keyframes blink {
-  0%, 95%, 100% { filter: none; }
-  97% { transform: translate(-50%, -50%) scaleY(0.1); }
-}
-.love-mode .heart {
-  filter: drop-shadow(0 0 15px hotpink);
-  animation: pulse 0.6s infinite ease-in-out;
-}
-
-#female-penguin {
-  position: absolute;
-  width: 80px;
-  transform: translate(-50%, -50%) scaleX(-1);
-  opacity: 0;
-  transition: opacity 0.5s ease;
-}
-
-#female-penguin.show {
-  opacity: 1;
-}
+/* =========================
+   💋 KISS BOUNCE
+========================= */
 
 .kiss {
   animation: kissBounce 0.4s ease-in-out 3;
 }
 
 @keyframes kissBounce {
-  0% { transform: translate(-50%, -50%) scale(1); }
-  50% { transform: translate(-50%, -50%) scale(1.1); }
+  0%   { transform: translate(-50%, -50%) scale(1); }
+  50%  { transform: translate(-50%, -50%) scale(1.1); }
   100% { transform: translate(-50%, -50%) scale(1); }
-}
-#female-penguin {
-  position: absolute;
-  width: 80px;
-  transform: translate(-50%, -50%);
-  opacity: 0;
-  transition: opacity 0.5s ease;
-}
-
-#female-penguin.show {
-  opacity: 1;
-}
-
-/* 🎀 Bow */
-#female-penguin .bow {
-  position: absolute;
-  top: -8px;
-  right: 10px;
-  width: 18px;
-  height: 12px;
-  background: hotpink;
-  border-radius: 6px;
-}
-
-#female-penguin .bow::before,
-#female-penguin .bow::after {
-  content: "";
-  position: absolute;
-  width: 10px;
-  height: 12px;
-  background: pink;
-  border-radius: 50%;
-}
-
-#female-penguin .bow::before {
-  left: -8px;
-}
-
-#female-penguin .bow::after {
-  right: -8px;
-}
-
-/* 🌸 Blush */
-#female-penguin .blush {
-  position: absolute;
-  bottom: 25px;
-  left: 20px;
-  width: 40px;
-  height: 15px;
-  background: radial-gradient(circle, rgba(255,100,150,0.7) 0%, transparent 70%);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-#female-penguin.blushing .blush {
-  opacity: 1;
 }
